@@ -1,4 +1,4 @@
-# This is the C side of duplexdyad.
+/* This is the C side of duplexdyad. */
 #include "changestats.users.h"
 
 D_CHANGESTAT_FN(d_duplexdyad){
@@ -112,7 +112,7 @@ D_CHANGESTAT_FN(d_duplexdyad){
 		for(j = 0; j < N_CHANGE_STATS; j++){
 			CHANGE_STAT[j] += IS_OUTEDGE(tail, head) ? -changes[type[j] - 1] : changes[type[j] - 1];		  
 		}
-    // The current version of MPNet (v1.04) double counts certain cross-layer statistics; uncomment the following loop to reproduce exactly that.
+    		// The current version of MPNet (v1.04) double counts certain cross-layer statistics; uncomment the following loop to reproduce exactly that.
 		//for(j = 0; j < N_CHANGE_STATS; j++){
 		//	CHANGE_STAT[j] *= 2;
 		//}
