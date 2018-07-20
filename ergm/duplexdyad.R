@@ -2,7 +2,7 @@
 # There are five configurations: e, f, g, h, i. 
 # (See pp 12-13 in https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835)
 
-# The function takes three arguments:
+# The resulting duplexdyad() function to be used in the ergm framework takes three arguments:
 # 1) "nw": the network object, which needs to be directed and not bipartite; and include a nodal attribute denoting layer membership called "layer.mem"
 # 2) "type": the cross-layer configurations to include in the ergm model
 # 3) "layers": the two layers to include in the duplex
