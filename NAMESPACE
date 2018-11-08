@@ -1,0 +1,7 @@
+useDynLib(multilayer.ergm)
+
+import(network,ergm)
+importFrom(statnet.common,statnetStartupMessage)
+
+# Export all names
+exportPattern(".")

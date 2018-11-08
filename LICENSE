@@ -1,0 +1,24 @@
+--------------------------------------------------
+License for original code and revisions produced by Ted Hsuan Yun Chen in 'multilayer.ergm'
+--------------------------------------------------
+
+This software is distributed under the GPL-3 license. It is free and open source.
+
+--------------------------------------------------
+
+--------------------------------------------------
+License for the 'statnet' component package 'ergm.userterms'
+--------------------------------------------------
+
+This software is distributed under the GPL-3 license.  It is free,
+open source, and has the following attribution requirements
+(GPL Section 7):
+
+(a) you agree to retain in 'ergm.userterms' and any modifications to 'ergm.userterms'
+    the copyright, author attribution and URL information as
+    provided at statnet.org/attribution
+(b) you agree that 'ergm.userterms' and any modifications to 'ergm.userterms' will,
+    when used, display the attribution:
+     Based on 'statnet' project software (statnet.org).
+     For license and citation information see statnet.org/attribution
+--------------------------------------------------
