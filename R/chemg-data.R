@@ -9,7 +9,7 @@
 #' @format A matrix with 30 columns and 30 rows.
 #'
 #' @references 
-#' Replication materials for Leifeld, P and V Schneider, Information Exchange in Policy Networks. American Journal of Political Science 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
+#' Replication materials for Leifeld, P and V Schneider, 2012, Information Exchange in Policy Networks. \emph{American Journal of Political Science} 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
 #'
 #' @source Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 "committee"
@@ -25,7 +25,7 @@
 #' @format A matrix with 30 columns and 30 rows.
 #'
 #' @references 
-#' Replication materials for Leifeld, P and V Schneider, Information Exchange in Policy Networks. American Journal of Political Science 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
+#' Replication materials for Leifeld, P and V Schneider, 2012, Information Exchange in Policy Networks. \emph{American Journal of Political Science} 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
 #'
 #' @source Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 "infrep"
@@ -41,7 +41,7 @@
 #' @format A matrix with 30 columns and 30 rows.
 #'
 #' @references 
-#' Replication materials for Leifeld, P and V Schneider, Information Exchange in Policy Networks. American Journal of Political Science 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
+#' Replication materials for Leifeld, P and V Schneider, 2012, Information Exchange in Policy Networks. \emph{American Journal of Political Science} 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
 #'
 #' @source Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 "pol"
@@ -57,7 +57,7 @@
 #' @format A matrix with 30 columns and 30 rows.
 #'
 #' @references 
-#' Replication materials for Leifeld, P and V Schneider, Information Exchange in Policy Networks. American Journal of Political Science 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
+#' Replication materials for Leifeld, P and V Schneider, 2012, Information Exchange in Policy Networks. \emph{American Journal of Political Science} 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
 #'
 #' @source Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 "prefsim"
@@ -73,7 +73,7 @@
 #' @format A matrix with 30 columns and 30 rows.
 #'
 #' @references 
-#' Replication materials for Leifeld, P and V Schneider, Information Exchange in Policy Networks. American Journal of Political Science 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
+#' Replication materials for Leifeld, P and V Schneider, 2012, Information Exchange in Policy Networks. \emph{American Journal of Political Science} 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
 #'
 #' @source Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 "sci"
@@ -89,7 +89,7 @@
 #' @format A character vector of length 30.
 #'
 #' @references 
-#' Replication materials for Leifeld, P and V Schneider, Information Exchange in Policy Networks. American Journal of Political Science 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
+#' Replication materials for Leifeld, P and V Schneider, 2012, Information Exchange in Policy Networks. \emph{American Journal of Political Science} 53(3): 731-744. \url{http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x}
 #'
 #' @source Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 "types"

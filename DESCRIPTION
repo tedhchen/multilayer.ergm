@@ -11,3 +11,5 @@ Author: Ted Hsuan Yun Chen [aut, cre]
 Maintainer: Ted Hsuan Yun Chen <ted.hsuanyun.chen@gmail.com>
 NeedsCompilation: yes
 LazyData: true
+Encoding: UTF-8
+RoxygenNote: 6.1.1
