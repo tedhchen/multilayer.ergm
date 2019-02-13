@@ -1,15 +1,3 @@
-.onAttach <- function(libname, pkgname) {
-  desc<- packageDescription(pkgname, libname)
-  packageStartupMessage(
-    '======================\n',
-    'Package:  multilayer.ergm\n', 
-    'Version:  ', desc$Version, '\n', 
-    'Date:     ', desc$Date, '\n', 
-    'Authors:  Ted Hsuan Yun Chen (Pennsylvania State University)\n'
-  )
-  packageStartupMessage("Based on 'statnet' project software (statnet.org). For license and citation information see statnet.org/attribution.")
-}
-
 #' Check Multilayer
 #' 
 #' Check whether layer membership has been properly supplied to the network object.
@@ -56,6 +44,9 @@ check.multilayer <- function(nw){
 #'@references Chen, T, 2019, "Statistical Inference for Multilayer Networks in Political Science."
 #'  
 #'Kivela M et al., 2014, "Multilayer Networks." \emph{Journal of Complex Networks} 2(3): 203-271. \url{https://doi.org/10.1093/comnet/cnu016}
+#' 
+#' @export
+#' @import network
 #' 
 # Function that takes supplied networks or matrices and converts them to a single multiplex network.
 to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
@@ -104,6 +95,8 @@ to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
 #' mat <- uptolo(mat)
 #' mat
 #' @return A symmetric matrix.
+#' 
+#' @export
 
 # Function to fill lower half of a matrix with the upper half. Two arguments:
 # 1) mat is the matrix; 2) fill.na is a logical of whether NAs should be filled with 0s.
