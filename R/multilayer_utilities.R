@@ -10,6 +10,18 @@
   packageStartupMessage("Based on 'statnet' project software (statnet.org). For license and citation information see statnet.org/attribution.")
 }
 
+#' Check Multilayer
+#' 
+#' Check whether layer membership has been properly supplied to the network object.
+#' 
+#' In order for multilayer terms to be used in the ERGM, the network object requires a vertex attribute named \code{'layer.mem'} to 
+#' identify using numeric values which layer each node belongs to.
+#' \code{check.multilayer} checks whether the supplied network has this vertex attribute and whether it is in the correct format.
+#'
+#' @param nw a \code{network} object.
+#' @return Silently returns \code{TRUE} or \code{FALSE} indicating whether layer membership has been properly supplied to the network object; 
+#' also prints a confirmation in the console.
+
 # Function to check whether layer membership has been properly supplied to the network.
 check.multilayer <- function(nw){
   if(class(nw) != "network"){stop("Object supplied is not of the class \'network\'.", call. = F)}
@@ -20,6 +32,31 @@ check.multilayer <- function(nw){
   }
 }
 
+#' To Multiplex
+#' 
+#' Convert supplied network or matrix objects into a multiplex network. 
+#' 
+#' Multiplex networks are a subset of multilayer networks where multiple types of ties exist among the same set of actors, 
+#' represented by different nodes on different layers of the multilayer network. 
+#' The matrices or \code{network} objects supplied to the function must therefore contain the same number of nodes.
+#'
+#' @param ... matrices or \code{network} objects, or a list of matrices or \code{network} objects.
+#' @param output one of \code{"matrix"} or \code{"network"}; can be abbreviated.
+#' @param directed logical; if output is a \code{network} object, whether it should be a directed network.
+#' @return A multiplex network in either matrix or \code{network} object format, depending on whether the output is specified as \code{"matrix"} or \code{"network"}.
+#' 
+#' If a \code{network} object is returned, it will have the required vertex attribute \code{'layer.mem'} where the layer id is the numeric order in which they were supplied to the function.
+#' 
+#' @examples
+#' mat1 <- matrix(1, nrow = 3, ncol = 3) 
+#' mat2 <- matrix(2, nrow = 3, ncol = 3)
+#' ml.net <- to.multiplex(mat1, mat2, output = "network")
+#' summary(ml.net)
+#' 
+#'@references Chen, T, 2019, "Statistical Inference for Multilayer Networks in Political Science."
+#'  
+#'Kivela M et al., 2014, "Multilayer Networks." \emph{Journal of Complex Networks} 2(3): 203-271. \url{https://doi.org/10.1093/comnet/cnu016}
+#' 
 # Function that takes supplied networks or matrices and converts them to a single multiplex network.
 to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
   dots <- list(...)
@@ -52,6 +89,21 @@ to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
   if(output == "network"){return(network(mlmat, directed = directed, 
                                          vertex.attr = list(c(matrix(rep(1:l, n),ncol = l, byrow = T))), vertex.attrnames = list("layer.mem")))}
 }
+#' Fill Lower Triangular Part of Matrix with its Upper Triangular Part
+#'
+#' Utility function that overwrites the lower triangular part of the supplied matrix with the upper triangular part.
+#'
+#' @param mat a square matrix.
+#' @param fill.na logical; whether \code{NAs} in the symmetric matrix should be changed to 0s.
+#' 
+#' @examples 
+#' mat <- matrix(c(0,1,1,1,
+#'                 0,0,1,1,
+#'                 0,0,0,1,
+#'                 0,0,0,0),ncol = 4, byrow = T)
+#' mat <- uptolo(mat)
+#' mat
+#' @return A symmetric matrix.
 
 # Function to fill lower half of a matrix with the upper half. Two arguments:
 # 1) mat is the matrix; 2) fill.na is a logical of whether NAs should be filled with 0s.

@@ -26,7 +26,7 @@ data(nodeatts)
 A data frame of six attributes associated with the 733 actors in the global conflict network for the period of 1989-1995. For details on how temporally dynamic variables are aggregated, see Chen (2019). The row ids are Correlates of War country codes or Uppsala Confict Data Program actor codes.
 }
 \references{
-Allansson, M, E Melander, and L Themner. 2017, "Organized violence, 1989-2016." \emph{Journal of Peace Research} 54(4): 727-742. \url{https://doi.org/10.1177/0022343317718773}
+Allansson, M, E Melander, and L Themner, 2017, "Organized violence, 1989-2016." \emph{Journal of Peace Research} 54(4): 727-742. \url{https://doi.org/10.1177/0022343317718773}
 
 Chen, T, 2019, "Statistical Inference for Multilayer Networks in Political Science."
 

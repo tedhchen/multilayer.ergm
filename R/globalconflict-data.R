@@ -107,7 +107,7 @@
 #' \item{trans}{An indicator for whether the actor is a transitional regime. All nonstate actors are coded to not be transitional regimes.}
 #' }
 #'
-#' @references Allansson, M, E Melander, and L Themner. 2017, "Organized violence, 1989-2016." \emph{Journal of Peace Research} 54(4): 727-742. \url{https://doi.org/10.1177/0022343317718773}
+#' @references Allansson, M, E Melander, and L Themner, 2017, "Organized violence, 1989-2016." \emph{Journal of Peace Research} 54(4): 727-742. \url{https://doi.org/10.1177/0022343317718773}
 #' 
 #' Chen, T, 2019, "Statistical Inference for Multilayer Networks in Political Science."
 #' 
