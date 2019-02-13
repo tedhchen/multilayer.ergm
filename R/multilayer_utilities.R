@@ -9,6 +9,8 @@
 #' @param nw a \code{network} object.
 #' @return Silently returns \code{TRUE} or \code{FALSE} indicating whether layer membership has been properly supplied to the network object; 
 #' also prints a confirmation in the console.
+#' 
+#' @export
 
 # Function to check whether layer membership has been properly supplied to the network.
 check.multilayer <- function(nw){
