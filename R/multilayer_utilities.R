@@ -13,9 +13,9 @@
 # Function to check whether layer membership has been properly supplied to the network.
 check.multilayer <- function(nw){
   if(class(nw) != "network"){stop("Object supplied is not of the class \'network\'.", call. = F)}
-  if(anyNA(nw%v%"layer.mem")){warning("In the network supplied, one or more nodes is not assigned to a layer.", call. = F); invisible(FALSE)}else{
-    if(!is.numeric(nw%v%"layer.mem")){warning("In the network supplied, one or more layers does not have a numeric id. Layers must be identified by a numeric value.", call. = F);invisible(FALSE)}else{
-      message("Layer membership for all nodes are properly specified.");invisible(TRUE)
+  if(anyNA(nw%v%"layer.mem")){warning("In the network supplied, one or more nodes is not assigned to a layer.", call. = F); invisible(FALSE)} else {
+    if(!is.numeric(nw%v%"layer.mem")){warning("In the network supplied, one or more layers does not have a numeric id. Layers must be identified by a numeric value.", call. = F); invisible(FALSE)} else {
+      message("Layer membership for all nodes are properly specified."); invisible(TRUE)
     }
   }
 }
