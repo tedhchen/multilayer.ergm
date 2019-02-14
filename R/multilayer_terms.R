@@ -272,7 +272,7 @@ InitErgmTerm.nodecov_layer<-function (nw, arglist, ...) {
 
 # k-star within layer
 InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
-  a <- check.ErgmTerm(nw, arglist, directed=FALSE,
+  a <- check.ErgmTerm(nw, arglist, directed = FALSE,
                       varnames = c("k", "attrname", "levels", "layer"),
                       vartypes = c("numeric", "character", "character,numeric,logical", "numeric"),
                       defaultvalues = list(NULL, NULL, NULL, NULL),
