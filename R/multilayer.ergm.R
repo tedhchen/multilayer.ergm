@@ -2,6 +2,5 @@
 #' 
 #' This package extends exponential random graph models to applications with multilayer networks.
 #' 
-#' @useDynLib multilayer.ergm
 #' @name multilayer.ergm
 NULL
