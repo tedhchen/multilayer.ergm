@@ -48,7 +48,6 @@ check.multilayer <- function(nw){
 #'Kivela M et al., 2014, "Multilayer Networks." \emph{Journal of Complex Networks} 2(3): 203-271. \url{https://doi.org/10.1093/comnet/cnu016}
 #' 
 #' @export
-#' @import network
 #' 
 # Function that takes supplied networks or matrices and converts them to a single multiplex network.
 to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
