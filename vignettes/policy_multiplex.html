@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Ted Hsuan Yun Chen" />
+
+<meta name="date" content="2019-02-14" />
+
+<title>Illustrating the multilayer.ergm Package with a Multiplex Policy Network</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Illustrating the multilayer.ergm Package with a Multiplex Policy Network</h1>
+<h4 class="author"><em>Ted Hsuan Yun Chen</em></h4>
+<h4 class="date"><em>2019-02-14</em></h4>
+
+
+
+<p>This document outlines how to use the <code>multilayer.ergm</code> package to fit exponential random graph models (ERGM) in <code>R</code>. The <code>multilayer.ergm</code> package extends functionalities of the <code>ergm</code> package to multilayer network applications by providing a way to count local network configurations, or network motifs, that span more than one network layer. This document assumes you have a working knowledge of ERGMs and multilayer networks as described in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835">Chen (2019)</a>.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>First, install the package from GitHub. To do so, you will need the <code>devtools</code> package. If you are on a Windows machine, you will also need the standalone <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a>. If you do not already have the <code>network</code>, <code>ergm</code>, and <code>statnet.common</code> packages, installing <code>multilayer.ergm</code> will install them as well.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">install_github</span>(<span class="st">&quot;tedhchen/multilayer.ergm&quot;</span>)</code></pre></div>
+<p>Of course, we want to load the package, which will also load the <code>network</code>, <code>ergm</code>, and <code>statnet.common</code> packages.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(multilayer.ergm)</code></pre></div>
+</div>
+<div id="chemg-policy-network" class="section level2">
+<h2>ChemG Policy Network</h2>
+<p>In this exercise, we will be using data from the policy network surrounding legislation over control of the chemical industry in Germany in 1980 (ChemG). This data was used by <a href="http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x">Leifeld and Schneider (2012)</a> in their analysis of policy communication. To see the data associated with this policy network, we can refer to its help file.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">help</span>(chemg_data)</code></pre></div>
+<p>From the help file, we can see that there are five network data files. Each of these networks have the same number of nodes, representing the 30 actors in this policy system. We might study these networks independently as monoplex networks, but to understand the entire policy process, which is a system that includes interactions within and across all of these networks, we need to move to the multilayer approach.</p>
+</div>
+<div id="creating-a-multilayer-network" class="section level2">
+<h2>Creating a Multilayer Network</h2>
+<p>The <code>multilayer.ergm</code> package includes utility functions that help create multilayer networks and check <code>network</code> objects to see whether they satisfy the criteria for multilayer networks.</p>
+<p>A multilayer network has multiple layers, which is defined by the user. Technically, a <code>network</code> object is compatible with the <code>multilayer.ergm</code> package as long as it has a vertex attribute called <code>layer.mem</code>, which stands for <em>layer membership</em>. This vertex attribute should be a numeric vector that identifies the layer each node belongs to. The following line of code will assign the vertex attribute to the <code>network</code> object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network<span class="op">%v%</span><span class="st">'layer.mem'</span> &lt;-<span class="st"> </span>layer.ids</code></pre></div>
+<div id="policy-multiplex-network" class="section level3">
+<h3>Policy Multiplex Network</h3>
+<p>For this exercise, let us construct a multiplex network with one layer being a network of scientific communication among the actors (<code>sci</code>) and the other layer being perception of influence among the actors (<code>infrep</code>).</p>
+<p>In the matrix representation of a multiplex network, the network layers are on the main diagonal of the block matrix, and the off-diagonal blocks are identity matrices that serve to tie actors across layers. The <code>to.multiplex</code> function is a utility function that assembles networks as layers in a multilayer network, assigns layer ids to the nodes, and sets the off-diagonal matrices as identity matrices.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mnet &lt;-<span class="st"> </span><span class="kw">to.multiplex</span>(sci, infrep, <span class="dt">output =</span> <span class="st">&quot;network&quot;</span>)
+mnet
+<span class="co">#&gt;  Network attributes:</span>
+<span class="co">#&gt;   vertices = 60 </span>
+<span class="co">#&gt;   directed = TRUE </span>
+<span class="co">#&gt;   hyper = FALSE </span>
+<span class="co">#&gt;   loops = FALSE </span>
+<span class="co">#&gt;   multiple = FALSE </span>
+<span class="co">#&gt;   bipartite = FALSE </span>
+<span class="co">#&gt;   total edges= 406 </span>
+<span class="co">#&gt;     missing edges= 0 </span>
+<span class="co">#&gt;     non-missing edges= 406 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Vertex attribute names: </span>
+<span class="co">#&gt;     layer.mem vertex.names </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; No edge attributes</span></code></pre></div>
+<p>We can check whether the <code>network</code> object is compatible with multilayer terms manually, or with the <code>check.multilayer</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mnet<span class="op">%v%</span><span class="st">'layer.mem'</span>
+<span class="co">#&gt;  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2</span>
+<span class="co">#&gt; [36] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2</span>
+
+<span class="kw">check.multilayer</span>(mnet)
+<span class="co">#&gt; Layer membership for all nodes are properly specified.</span></code></pre></div>
+</div>
+<div id="plotting-multilayer-networks" class="section level3">
+<h3>Plotting Multilayer Networks</h3>
+<pre><code>  In progress.</code></pre>
+</div>
+</div>
+<div id="ergms-for-multilayer-networks" class="section level2">
+<h2>ERGMs for Multilayer Networks</h2>
+<p>Now that we have constructed our multilayer network <code>mnet</code>, we can fit an ERGM. Let us work our way up from a monoplex approach to the scientific communication network.</p>
+<div id="scientific-communication-monoplex-model" class="section level3">
+<h3>Scientific Communication Monoplex Model</h3>
+<p>First, we create the network.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scinet &lt;-<span class="st"> </span><span class="kw">network</span>(sci)
+scinet
+<span class="co">#&gt;  Network attributes:</span>
+<span class="co">#&gt;   vertices = 30 </span>
+<span class="co">#&gt;   directed = TRUE </span>
+<span class="co">#&gt;   hyper = FALSE </span>
+<span class="co">#&gt;   loops = FALSE </span>
+<span class="co">#&gt;   multiple = FALSE </span>
+<span class="co">#&gt;   bipartite = FALSE </span>
+<span class="co">#&gt;   total edges= 63 </span>
+<span class="co">#&gt;     missing edges= 0 </span>
+<span class="co">#&gt;     non-missing edges= 63 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Vertex attribute names: </span>
+<span class="co">#&gt;     vertex.names </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; No edge attributes</span></code></pre></div>
+<p>Then fit an ERGM using the <code>ergm</code> function from the <code>ergm</code> package. Let us include the baseline <code>edge</code> term, a term for how similar a pair of actors’ preferences are (<code>edgecov(prefsim)</code>), and a term for the tendency for actors to reciprocate scientific communication (<code>mutual</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod.monoplex &lt;-<span class="st"> </span><span class="kw">ergm</span>(scinet <span class="op">~</span><span class="st"> </span>edges <span class="op">+</span><span class="st"> </span><span class="kw">edgecov</span>(prefsim) <span class="op">+</span><span class="st"> </span>mutual, 
+                     <span class="dt">control =</span> <span class="kw">control.ergm</span>(<span class="dt">seed =</span> <span class="dv">206424</span>))</code></pre></div>
+<p>(In case anyone is interested <code>206424</code> is based on weather statistics in State College, PA when I wrote this: -2<span class="math inline">\(^\circ\)</span>C, 0% precipitation, 64% humidity, and a wind speed of 24km/h.)</p>
+<p>Let us look at the output:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.monoplex)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ==========================</span>
+<span class="co">#&gt; Summary of model fit</span>
+<span class="co">#&gt; ==========================</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Formula:   scinet ~ edges + edgecov(prefsim) + mutual</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations:  2 out of 20 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Monte Carlo MLE Results:</span>
+<span class="co">#&gt;                 Estimate Std. Error MCMC % z value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; edges           -2.88778    0.29080      0  -9.930   &lt;1e-04 ***</span>
+<span class="co">#&gt; edgecov.prefsim -0.01695    0.10041      0  -0.169    0.866    </span>
+<span class="co">#&gt; mutual           2.30708    0.43366      0   5.320   &lt;1e-04 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      Null Deviance: 1206.1  on 870  degrees of freedom</span>
+<span class="co">#&gt;  Residual Deviance:  428.8  on 867  degrees of freedom</span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; AIC: 434.8    BIC: 449.1    (Smaller is better.)</span></code></pre></div>
+<p>Next, we move to the multiplex with the scientific communication network on one layer, and preceptions of influence on the other layer.</p>
+</div>
+<div id="policy-multiplex-within-layer-model" class="section level3">
+<h3>Policy Multiplex, Within-layer Model</h3>
+<p>We already created this network earlier, but before we can fit the ERGM, we need to construct a network of sampling constraints that gives the multilayer network its multiplex structure. The <code>to.multiplex</code> function can do this as well. Make sure to specify <code>offzeros = TRUE</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">free &lt;-<span class="st"> </span><span class="kw">to.multiplex</span>(<span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">30</span>, <span class="dt">nrow =</span> <span class="dv">30</span>), <span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">30</span>, <span class="dt">nrow =</span> <span class="dv">30</span>), <span class="dt">output =</span> <span class="st">&quot;network&quot;</span>, <span class="dt">offzeros =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Now we can fit ERGMs of the multiplex network. Let us look at what happens when we fit an ERGM to a multiplex network but do not include any terms that capture dependence across layers.</p>
+<p>This within-layer model has the same terms as the previous monoplex model, for both network layers. The <code>multilayer.ergm</code> package includes a set of within-layer terms for multilayer networks. They are usually named after their <code>ergm</code> counterparts, but with <code>_layer</code> appended to the end. They also usually require an argument <code>layer</code>, which indicates which layer the term should be computed on.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod.within &lt;-<span class="st"> </span><span class="kw">ergm</span>(mnet
+                   <span class="op">~</span><span class="st"> </span><span class="kw">edgecov_layer</span>(<span class="st">&quot;edges&quot;</span>, <span class="dt">layer =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">edgecov_layer</span>(<span class="st">&quot;edges&quot;</span>, <span class="dt">layer =</span> <span class="dv">2</span>)
+                   <span class="op">+</span><span class="st"> </span><span class="kw">edgecov_layer</span>(prefsim, <span class="dt">layer =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">edgecov_layer</span>(prefsim, <span class="dt">layer =</span> <span class="dv">2</span>)
+                   <span class="op">+</span><span class="st"> </span><span class="kw">mutual</span>(<span class="st">&quot;layer.mem&quot;</span>, <span class="dt">diff =</span> T),
+                   <span class="dt">control =</span> <span class="kw">control.ergm</span>(<span class="dt">seed =</span> <span class="dv">206424</span>),
+                   <span class="dt">constraints =</span> <span class="op">~</span><span class="kw">fixallbut</span>(free))</code></pre></div>
+<p>This is the output:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.within)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ==========================</span>
+<span class="co">#&gt; Summary of model fit</span>
+<span class="co">#&gt; ==========================</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Formula:   mnet ~ edgecov_layer(&quot;edges&quot;, layer = 1) + edgecov_layer(&quot;edges&quot;, </span>
+<span class="co">#&gt;     layer = 2) + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, </span>
+<span class="co">#&gt;     layer = 2) + mutual(&quot;layer.mem&quot;, diff = T)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations:  2 out of 20 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Monte Carlo MLE Results:</span>
+<span class="co">#&gt;                         Estimate Std. Error MCMC % z value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; edgecov.layer.1.edges   -2.88405    0.29197      0  -9.878  &lt; 1e-04 ***</span>
+<span class="co">#&gt; edgecov.layer.2.edges   -1.27679    0.17920      0  -7.125  &lt; 1e-04 ***</span>
+<span class="co">#&gt; edgecov.layer.1.prefsim -0.01675    0.10199      0  -0.164  0.86952    </span>
+<span class="co">#&gt; edgecov.layer.2.prefsim  0.17500    0.06201      0   2.822  0.00477 ** </span>
+<span class="co">#&gt; mutual.same.layer.mem.1  2.29730    0.44750      0   5.134  &lt; 1e-04 ***</span>
+<span class="co">#&gt; mutual.same.layer.mem.2  0.34299    0.21883      0   1.567  0.11702    </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      Null Deviance: 2412  on 1740  degrees of freedom</span>
+<span class="co">#&gt;  Residual Deviance: 1516  on 1734  degrees of freedom</span>
+<span class="co">#&gt;  </span>
+<span class="co">#&gt; AIC: 1528    BIC: 1561    (Smaller is better.)</span></code></pre></div>
+<p>Remember that layer 1 is <code>sci</code> and layer 2 is <code>infrep</code>. From the output we see that the coefficients for the scientific layer is effectively the same as those from the monoplex model. (In fact, the only difference is due to randomness in the estimation procedure.) This is to be expected, because while two layers are included, we did not model any dependence between them, meaning that they do not influence each other at all.</p>
+</div>
+<div id="policy-multiplex-within-layer-model-1" class="section level3">
+<h3>Policy Multiplex, Within-layer Model</h3>
+<p>Now, let us fit a model that includes cross-layer dependence terms. Specifically, let us include, using <code>duplexdyad</code>, a term for cross-layer reinforcement and a term for cross-layer reciprocity. From the code below, we see that the <code>duplexdyad</code> term takes an argument <code>layers = c(1, 2)</code>. It means that the two layers included in the dependence term are layers 1 and 2. This format is common to cross-layer dependence terms in the <code>multilayer.ergm</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod.cross &lt;-<span class="st"> </span><span class="kw">ergm</span>(mnet 
+                  <span class="op">~</span><span class="st"> </span><span class="kw">edgecov_layer</span>(<span class="st">&quot;edges&quot;</span>, <span class="dt">layer =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">edgecov_layer</span>(<span class="st">&quot;edges&quot;</span>, <span class="dt">layer =</span> <span class="dv">2</span>)
+                  <span class="op">+</span><span class="st"> </span><span class="kw">edgecov_layer</span>(prefsim, <span class="dt">layer =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">edgecov_layer</span>(prefsim, <span class="dt">layer =</span> <span class="dv">2</span>)
+                  <span class="op">+</span><span class="st"> </span><span class="kw">mutual</span>(<span class="st">&quot;layer.mem&quot;</span>, <span class="dt">diff =</span> T)
+                  <span class="op">+</span><span class="st"> </span><span class="kw">duplexdyad</span>(<span class="kw">c</span>(<span class="st">&quot;e&quot;</span>,<span class="st">&quot;f&quot;</span>), <span class="dt">layers =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)),
+                  <span class="dt">control =</span> <span class="kw">control.ergm</span>(<span class="dt">seed =</span> <span class="dv">206424</span>),
+                  <span class="dt">constraints =</span> <span class="op">~</span><span class="kw">fixallbut</span>(free))</code></pre></div>
+<p>And the output:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.cross)</code></pre></div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

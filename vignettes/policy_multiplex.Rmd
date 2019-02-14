@@ -1,0 +1,142 @@
+---
+title: "Illustrating the multilayer.ergm Package with a Multiplex Policy Network"
+author: "Ted Hsuan Yun Chen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Illustrating the multilayer.ergm Package with a Multiplex Policy Network}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This document outlines how to use the `multilayer.ergm` package to fit exponential random graph models (ERGM) in `R`. The `multilayer.ergm` package extends functionalities of the `ergm` package to multilayer network applications by providing a way to count local network configurations, or network motifs, that span more than one network layer. This document assumes you have a working knowledge of ERGMs and multilayer networks as described in [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).
+
+
+## Installation
+First, install the package from GitHub. To do so, you will need the `devtools` package. If you are on a Windows machine, you will also need the standalone [Rtools](https://cran.r-project.org/bin/windows/Rtools/). If you do not already have the `network`, `ergm`, and `statnet.common` packages, installing `multilayer.ergm` will install them as well. 
+
+```{r, eval=FALSE}
+library(devtools)
+install_github("tedhchen/multilayer.ergm")
+```
+
+Of course, we want to load the package, which will also load the `network`, `ergm`, and `statnet.common` packages.
+```{r, message=FALSE}
+library(multilayer.ergm)
+```
+
+## ChemG Policy Network
+In this exercise, we will be using data from the policy network surrounding legislation over control of the chemical industry in Germany in 1980 (ChemG). This data was used by [Leifeld and Schneider (2012)](http://dx.doi.org/10.1111/j.1540-5907.2011.00580.x) in their analysis of policy communication. To see the data associated with this policy network, we can refer to its help file.
+
+```{r, eval=FALSE}
+help(chemg_data)
+```
+
+From the help file, we can see that there are five network data files. Each of these networks have the same number of nodes, representing the 30 actors in this policy system. We might study these networks independently as monoplex networks, but to understand the entire policy process, which is a system that includes interactions within and across all of these networks, we need to move to the multilayer approach.
+
+## Creating a Multilayer Network
+The `multilayer.ergm` package includes utility functions that help create multilayer networks and check `network` objects to see whether they satisfy the criteria for multilayer networks. 
+
+A multilayer network has multiple layers, which is defined by the user. Technically, a `network` object is compatible with the `multilayer.ergm` package as long as it has a vertex attribute called `layer.mem`, which stands for _layer membership_. This vertex attribute should be a numeric vector that identifies the layer each node belongs to. The following line of code will assign the vertex attribute to the `network` object.
+
+```{r, eval=FALSE}
+network%v%'layer.mem' <- layer.ids
+```
+
+### Policy Multiplex Network
+For this exercise, let us construct a multiplex network with one layer being a network of scientific communication among the actors (`sci`) and the other layer being perception of influence among the actors (`infrep`).
+
+In the matrix representation of a multiplex network, the network layers are on the main diagonal of the block matrix, and the off-diagonal blocks are identity matrices that serve to tie actors across layers. The `to.multiplex` function is a utility function that assembles networks as layers in a multilayer network, assigns layer ids to the nodes, and sets the off-diagonal matrices as identity matrices.
+
+```{r, eval=TRUE}
+mnet <- to.multiplex(sci, infrep, output = "network")
+mnet
+```
+
+We can check whether the `network` object is compatible with multilayer terms manually, or with the `check.multilayer` function.
+```{r, eval=TRUE}
+mnet%v%'layer.mem'
+
+check.multilayer(mnet)
+```
+
+### Plotting Multilayer Networks
+      In progress.
+
+## ERGMs for Multilayer Networks
+Now that we have constructed our multilayer network `mnet`, we can fit an ERGM. Let us work our way up from a monoplex approach to the scientific communication network.
+
+### Scientific Communication Monoplex Model
+First, we create the network.
+```{r}
+scinet <- network(sci)
+scinet
+```
+
+Then fit an ERGM using the `ergm` function from the `ergm` package. Let us include the baseline `edge` term, a term for how similar a pair of actors' preferences are (`edgecov(prefsim)`), and a term for the tendency for actors to reciprocate scientific communication (`mutual`).
+
+```{r, message=FALSE}
+mod.monoplex <- ergm(scinet ~ edges + edgecov(prefsim) + mutual, 
+                     control = control.ergm(seed = 206424))
+```
+
+(In case anyone is interested `206424` is based on weather statistics in State College, PA when I wrote this: -2$^\circ$C, 0% precipitation, 64% humidity, and a wind speed of 24km/h.)
+
+Let us look at the output:
+```{r}
+summary(mod.monoplex)
+```
+
+Next, we move to the multiplex with the scientific communication network on one layer, and preceptions of influence on the other layer.
+
+### Policy Multiplex, Within-layer Model
+We already created this network earlier, but before we can fit the ERGM, we need to construct a network of sampling constraints that gives the multilayer network its multiplex structure. The `to.multiplex` function can do this as well. Make sure to specify `offzeros = TRUE`.
+
+```{r}
+free <- to.multiplex(matrix(1, ncol = 30, nrow = 30), matrix(1, ncol = 30, nrow = 30), output = "network", offzeros = TRUE)
+```
+
+Now we can fit ERGMs of the multiplex network. Let us look at what happens when we fit an ERGM to a multiplex network but do not include any terms that capture dependence across layers.
+
+This within-layer model has the same terms as the previous monoplex model, for both network layers. The `multilayer.ergm` package includes a set of within-layer terms for multilayer networks. They are usually named after their `ergm` counterparts, but with `_layer` appended to the end. They also usually require an argument `layer`, which indicates which layer the term should be computed on.
+
+```{r, message=FALSE}
+mod.within <- ergm(mnet
+                   ~ edgecov_layer("edges", layer = 1) + edgecov_layer("edges", layer = 2)
+                   + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, layer = 2)
+                   + mutual("layer.mem", diff = T),
+                   control = control.ergm(seed = 206424),
+                   constraints = ~fixallbut(free))
+```
+
+This is the output:
+```{r}
+summary(mod.within)
+```
+
+Remember that layer 1 is `sci` and layer 2 is `infrep`. From the output we see that the coefficients for the scientific layer is effectively the same as those from the monoplex model. (In fact, the only difference is due to randomness in the estimation procedure.) This is to be expected, because while two layers are included, we did not model any dependence between them, meaning that they do not influence each other at all.
+
+### Policy Multiplex, Within-layer Model
+Now, let us fit a model that includes cross-layer dependence terms. Specifically, let us include, using `duplexdyad`, a term for cross-layer reinforcement and a term for cross-layer reciprocity. From the code below, we see that the `duplexdyad` term takes an argument `layers = c(1, 2)`. It means that the two layers included in the dependence term are layers 1 and 2. This format is common to cross-layer dependence terms in the `multilayer.ergm` package.
+
+```{r, eval=FALSE}
+mod.cross <- ergm(mnet 
+                  ~ edgecov_layer("edges", layer = 1) + edgecov_layer("edges", layer = 2)
+                  + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, layer = 2)
+                  + mutual("layer.mem", diff = T)
+                  + duplexdyad(c("e","f"), layers = c(1,2)),
+                  control = control.ergm(seed = 206424),
+                  constraints = ~fixallbut(free))
+```
+
+And the output:
+```{r, eval=FALSE}
+summary(mod.cross)
+```
