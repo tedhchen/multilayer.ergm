@@ -4,7 +4,8 @@
 \alias{to.multiplex}
 \title{To Multiplex}
 \usage{
-to.multiplex(..., output = c("matrix", "network"), directed = TRUE)
+to.multiplex(..., output = c("matrix", "network"), directed = TRUE,
+  offzeros = FALSE)
 }
 \arguments{
 \item{...}{matrices or \code{network} objects, or a list of matrices or \code{network} objects.}
@@ -12,6 +13,8 @@ to.multiplex(..., output = c("matrix", "network"), directed = TRUE)
 \item{output}{one of \code{"matrix"} or \code{"network"}; can be abbreviated.}
 
 \item{directed}{logical; if output is a \code{network} object, whether it should be a directed network.}
+
+\item{offzeros}{logical; if the off diagonal blocks should be all zeros.}
 }
 \value{
 A multiplex network in either matrix or \code{network} object format, depending on whether the output is specified as \code{"matrix"} or \code{"network"}.
@@ -25,6 +28,8 @@ Convert supplied network or matrix objects into a multiplex network.
 Multiplex networks are a subset of multilayer networks where multiple types of ties exist among the same set of actors, 
 represented by different nodes on different layers of the multilayer network. 
 The matrices or \code{network} objects supplied to the function must therefore contain the same number of nodes.
+
+Setting \code{offzeros = TRUE} is a convenient way to create matrices used in specifying constraints for multiplex networks.
 }
 \examples{
 mat1 <- matrix(1, nrow = 3, ncol = 3) 

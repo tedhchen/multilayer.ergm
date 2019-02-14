@@ -29,10 +29,14 @@ check.multilayer <- function(nw){
 #' Multiplex networks are a subset of multilayer networks where multiple types of ties exist among the same set of actors, 
 #' represented by different nodes on different layers of the multilayer network. 
 #' The matrices or \code{network} objects supplied to the function must therefore contain the same number of nodes.
+#' 
+#' Setting \code{offzeros = TRUE} is a convenient way to create matrices used in specifying constraints for multiplex networks.
 #'
 #' @param ... matrices or \code{network} objects, or a list of matrices or \code{network} objects.
 #' @param output one of \code{"matrix"} or \code{"network"}; can be abbreviated.
 #' @param directed logical; if output is a \code{network} object, whether it should be a directed network.
+#' @param offzeros logical; if the off diagonal blocks should be all zeros.
+#' 
 #' @return A multiplex network in either matrix or \code{network} object format, depending on whether the output is specified as \code{"matrix"} or \code{"network"}.
 #' 
 #' If a \code{network} object is returned, it will have the required vertex attribute \code{'layer.mem'} where the layer id is the numeric order in which they were supplied to the function.
@@ -50,7 +54,7 @@ check.multilayer <- function(nw){
 #' @export
 #' 
 # Function that takes supplied networks or matrices and converts them to a single multiplex network.
-to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
+to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE, offzeros = FALSE){
   dots <- list(...)
   if(length(dots) == 1){
     if(is.network(...)|is.matrix(...)){stop("Only one network or matrix supplied.", call. = F)} else {
@@ -66,12 +70,14 @@ to.multiplex <- function(..., output = c("matrix", "network"), directed = TRUE){
   if(!all(abs(sapply(matlist, ncol) - mean(sapply(matlist, ncol))) == 0 )){stop("Not all network layers have the same number of nodes.", call. = F)} else {
     l <- length(matlist); n <- ncol(matlist[[1]])
     mlmat <- matrix(0, ncol = l * n, nrow = l * n)
-    for(i in 1:(l - 1)){
-      for(j in (i + 1):l){
-        mlmat[(1 + (i - 1) * n):(i * n), (1 + (j - 1) * n):(j * n)] <- diag(n)
+    if(!offzeros){
+      for(i in 1:(l - 1)){
+        for(j in (i + 1):l){
+          mlmat[(1 + (i - 1) * n):(i * n), (1 + (j - 1) * n):(j * n)] <- diag(n)
+        }
       }
+      mlmat <- uptolo(mlmat)
     }
-    mlmat <- uptolo(mlmat)
     for(i in 1:l){
       mlmat[(1 + (i - 1) * n):(i * n), (1 + (i - 1) * n):(i * n)] <- matlist[[i]]
     }
