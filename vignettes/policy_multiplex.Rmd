@@ -17,7 +17,7 @@ First, install the package from GitHub. To do so, you will need the `devtools` p
 
 ```{r, eval=FALSE}
 library(devtools)
-install_github("tedhchen/multilayer.ergm", build_vignette = TRUE)
+install_github("tedhchen/multilayer.ergm", build_vignettes = TRUE)
 ```
 
 Of course, we want to load the package, which will also load the `network`, `ergm`, and `statnet.common` packages.
