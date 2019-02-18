@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ted Hsuan Yun Chen" />
 
-<meta name="date" content="2019-02-14" />
+<meta name="date" content="2019-02-18" />
 
 <title>Illustrating the multilayer.ergm Package with a Multiplex Policy Network</title>
 
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Illustrating the multilayer.ergm Package with a Multiplex Policy Network</h1>
 <h4 class="author"><em>Ted Hsuan Yun Chen</em></h4>
-<h4 class="date"><em>2019-02-14</em></h4>
+<h4 class="date"><em>2019-02-18</em></h4>
 
 
 
@@ -101,7 +101,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Installation</h2>
 <p>First, install the package from GitHub. To do so, you will need the <code>devtools</code> package. If you are on a Windows machine, you will also need the standalone <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a>. If you do not already have the <code>network</code>, <code>ergm</code>, and <code>statnet.common</code> packages, installing <code>multilayer.ergm</code> will install them as well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(<span class="st">&quot;tedhchen/multilayer.ergm&quot;</span>)</code></pre></div>
+<span class="kw">install_github</span>(<span class="st">&quot;tedhchen/multilayer.ergm&quot;</span>, <span class="dt">build_vignette =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Of course, we want to load the package, which will also load the <code>network</code>, <code>ergm</code>, and <code>statnet.common</code> packages.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(multilayer.ergm)</code></pre></div>
 </div>
@@ -121,29 +121,28 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>For this exercise, let us construct a multiplex network with one layer being a network of scientific communication among the actors (<code>sci</code>) and the other layer being perception of influence among the actors (<code>infrep</code>).</p>
 <p>In the matrix representation of a multiplex network, the network layers are on the main diagonal of the block matrix, and the off-diagonal blocks are identity matrices that serve to tie actors across layers. The <code>to.multiplex</code> function is a utility function that assembles networks as layers in a multilayer network, assigns layer ids to the nodes, and sets the off-diagonal matrices as identity matrices.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mnet &lt;-<span class="st"> </span><span class="kw">to.multiplex</span>(sci, infrep, <span class="dt">output =</span> <span class="st">&quot;network&quot;</span>)
-mnet
-<span class="co">#&gt;  Network attributes:</span>
-<span class="co">#&gt;   vertices = 60 </span>
-<span class="co">#&gt;   directed = TRUE </span>
-<span class="co">#&gt;   hyper = FALSE </span>
-<span class="co">#&gt;   loops = FALSE </span>
-<span class="co">#&gt;   multiple = FALSE </span>
-<span class="co">#&gt;   bipartite = FALSE </span>
-<span class="co">#&gt;   total edges= 406 </span>
-<span class="co">#&gt;     missing edges= 0 </span>
-<span class="co">#&gt;     non-missing edges= 406 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Vertex attribute names: </span>
-<span class="co">#&gt;     layer.mem vertex.names </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; No edge attributes</span></code></pre></div>
+mnet</code></pre></div>
+<pre><code>##  Network attributes:
+##   vertices = 60 
+##   directed = TRUE 
+##   hyper = FALSE 
+##   loops = FALSE 
+##   multiple = FALSE 
+##   bipartite = FALSE 
+##   total edges= 406 
+##     missing edges= 0 
+##     non-missing edges= 406 
+## 
+##  Vertex attribute names: 
+##     layer.mem vertex.names 
+## 
+## No edge attributes</code></pre>
 <p>We can check whether the <code>network</code> object is compatible with multilayer terms manually, or with the <code>check.multilayer</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mnet<span class="op">%v%</span><span class="st">'layer.mem'</span>
-<span class="co">#&gt;  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2</span>
-<span class="co">#&gt; [36] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2</span>
-
-<span class="kw">check.multilayer</span>(mnet)
-<span class="co">#&gt; Layer membership for all nodes are properly specified.</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mnet<span class="op">%v%</span><span class="st">'layer.mem'</span></code></pre></div>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2
+## [36] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">check.multilayer</span>(mnet)</code></pre></div>
+<pre><code>## Layer membership for all nodes are properly specified.</code></pre>
 </div>
 <div id="plotting-multilayer-networks" class="section level3">
 <h3>Plotting Multilayer Networks</h3>
@@ -157,49 +156,49 @@ mnet
 <h3>Scientific Communication Monoplex Model</h3>
 <p>First, we create the network.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scinet &lt;-<span class="st"> </span><span class="kw">network</span>(sci)
-scinet
-<span class="co">#&gt;  Network attributes:</span>
-<span class="co">#&gt;   vertices = 30 </span>
-<span class="co">#&gt;   directed = TRUE </span>
-<span class="co">#&gt;   hyper = FALSE </span>
-<span class="co">#&gt;   loops = FALSE </span>
-<span class="co">#&gt;   multiple = FALSE </span>
-<span class="co">#&gt;   bipartite = FALSE </span>
-<span class="co">#&gt;   total edges= 63 </span>
-<span class="co">#&gt;     missing edges= 0 </span>
-<span class="co">#&gt;     non-missing edges= 63 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Vertex attribute names: </span>
-<span class="co">#&gt;     vertex.names </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; No edge attributes</span></code></pre></div>
+scinet</code></pre></div>
+<pre><code>##  Network attributes:
+##   vertices = 30 
+##   directed = TRUE 
+##   hyper = FALSE 
+##   loops = FALSE 
+##   multiple = FALSE 
+##   bipartite = FALSE 
+##   total edges= 63 
+##     missing edges= 0 
+##     non-missing edges= 63 
+## 
+##  Vertex attribute names: 
+##     vertex.names 
+## 
+## No edge attributes</code></pre>
 <p>Then fit an ERGM using the <code>ergm</code> function from the <code>ergm</code> package. Let us include the baseline <code>edge</code> term, a term for how similar a pair of actors’ preferences are (<code>edgecov(prefsim)</code>), and a term for the tendency for actors to reciprocate scientific communication (<code>mutual</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod.monoplex &lt;-<span class="st"> </span><span class="kw">ergm</span>(scinet <span class="op">~</span><span class="st"> </span>edges <span class="op">+</span><span class="st"> </span><span class="kw">edgecov</span>(prefsim) <span class="op">+</span><span class="st"> </span>mutual, 
                      <span class="dt">control =</span> <span class="kw">control.ergm</span>(<span class="dt">seed =</span> <span class="dv">206424</span>))</code></pre></div>
 <p>(In case anyone is interested <code>206424</code> is based on weather statistics in State College, PA when I wrote this: -2<span class="math inline">\(^\circ\)</span>C, 0% precipitation, 64% humidity, and a wind speed of 24km/h.)</p>
 <p>Let us look at the output:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.monoplex)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ==========================</span>
-<span class="co">#&gt; Summary of model fit</span>
-<span class="co">#&gt; ==========================</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Formula:   scinet ~ edges + edgecov(prefsim) + mutual</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iterations:  2 out of 20 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Monte Carlo MLE Results:</span>
-<span class="co">#&gt;                 Estimate Std. Error MCMC % z value Pr(&gt;|z|)    </span>
-<span class="co">#&gt; edges           -2.88778    0.29080      0  -9.930   &lt;1e-04 ***</span>
-<span class="co">#&gt; edgecov.prefsim -0.01695    0.10041      0  -0.169    0.866    </span>
-<span class="co">#&gt; mutual           2.30708    0.43366      0   5.320   &lt;1e-04 ***</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;      Null Deviance: 1206.1  on 870  degrees of freedom</span>
-<span class="co">#&gt;  Residual Deviance:  428.8  on 867  degrees of freedom</span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; AIC: 434.8    BIC: 449.1    (Smaller is better.)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.monoplex)</code></pre></div>
+<pre><code>## 
+## ==========================
+## Summary of model fit
+## ==========================
+## 
+## Formula:   scinet ~ edges + edgecov(prefsim) + mutual
+## 
+## Iterations:  2 out of 20 
+## 
+## Monte Carlo MLE Results:
+##                 Estimate Std. Error MCMC % z value Pr(&gt;|z|)    
+## edges           -2.88778    0.29080      0  -9.930   &lt;1e-04 ***
+## edgecov.prefsim -0.01695    0.10041      0  -0.169    0.866    
+## mutual           2.30708    0.43366      0   5.320   &lt;1e-04 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+##      Null Deviance: 1206.1  on 870  degrees of freedom
+##  Residual Deviance:  428.8  on 867  degrees of freedom
+##  
+## AIC: 434.8    BIC: 449.1    (Smaller is better.)</code></pre>
 <p>Next, we move to the multiplex with the scientific communication network on one layer, and preceptions of influence on the other layer.</p>
 </div>
 <div id="policy-multiplex-within-layer-model" class="section level3">
@@ -215,33 +214,33 @@ scinet
                    <span class="dt">control =</span> <span class="kw">control.ergm</span>(<span class="dt">seed =</span> <span class="dv">206424</span>),
                    <span class="dt">constraints =</span> <span class="op">~</span><span class="kw">fixallbut</span>(free))</code></pre></div>
 <p>This is the output:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.within)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ==========================</span>
-<span class="co">#&gt; Summary of model fit</span>
-<span class="co">#&gt; ==========================</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Formula:   mnet ~ edgecov_layer(&quot;edges&quot;, layer = 1) + edgecov_layer(&quot;edges&quot;, </span>
-<span class="co">#&gt;     layer = 2) + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, </span>
-<span class="co">#&gt;     layer = 2) + mutual(&quot;layer.mem&quot;, diff = T)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Iterations:  2 out of 20 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Monte Carlo MLE Results:</span>
-<span class="co">#&gt;                         Estimate Std. Error MCMC % z value Pr(&gt;|z|)    </span>
-<span class="co">#&gt; edgecov.layer.1.edges   -2.88405    0.29197      0  -9.878  &lt; 1e-04 ***</span>
-<span class="co">#&gt; edgecov.layer.2.edges   -1.27679    0.17920      0  -7.125  &lt; 1e-04 ***</span>
-<span class="co">#&gt; edgecov.layer.1.prefsim -0.01675    0.10199      0  -0.164  0.86952    </span>
-<span class="co">#&gt; edgecov.layer.2.prefsim  0.17500    0.06201      0   2.822  0.00477 ** </span>
-<span class="co">#&gt; mutual.same.layer.mem.1  2.29730    0.44750      0   5.134  &lt; 1e-04 ***</span>
-<span class="co">#&gt; mutual.same.layer.mem.2  0.34299    0.21883      0   1.567  0.11702    </span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;      Null Deviance: 2412  on 1740  degrees of freedom</span>
-<span class="co">#&gt;  Residual Deviance: 1516  on 1734  degrees of freedom</span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; AIC: 1528    BIC: 1561    (Smaller is better.)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.within)</code></pre></div>
+<pre><code>## 
+## ==========================
+## Summary of model fit
+## ==========================
+## 
+## Formula:   mnet ~ edgecov_layer(&quot;edges&quot;, layer = 1) + edgecov_layer(&quot;edges&quot;, 
+##     layer = 2) + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, 
+##     layer = 2) + mutual(&quot;layer.mem&quot;, diff = T)
+## 
+## Iterations:  2 out of 20 
+## 
+## Monte Carlo MLE Results:
+##                         Estimate Std. Error MCMC % z value Pr(&gt;|z|)    
+## edgecov.layer.1.edges   -2.88405    0.29197      0  -9.878  &lt; 1e-04 ***
+## edgecov.layer.2.edges   -1.27679    0.17920      0  -7.125  &lt; 1e-04 ***
+## edgecov.layer.1.prefsim -0.01675    0.10199      0  -0.164  0.86952    
+## edgecov.layer.2.prefsim  0.17500    0.06201      0   2.822  0.00477 ** 
+## mutual.same.layer.mem.1  2.29730    0.44750      0   5.134  &lt; 1e-04 ***
+## mutual.same.layer.mem.2  0.34299    0.21883      0   1.567  0.11702    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+##      Null Deviance: 2412  on 1740  degrees of freedom
+##  Residual Deviance: 1516  on 1734  degrees of freedom
+##  
+## AIC: 1528    BIC: 1561    (Smaller is better.)</code></pre>
 <p>Remember that layer 1 is <code>sci</code> and layer 2 is <code>infrep</code>. From the output we see that the coefficients for the scientific layer is effectively the same as those from the monoplex model. (In fact, the only difference is due to randomness in the estimation procedure.) This is to be expected, because while two layers are included, we did not model any dependence between them, meaning that they do not influence each other at all.</p>
 </div>
 <div id="policy-multiplex-within-layer-model-1" class="section level3">
@@ -256,6 +255,35 @@ scinet
                   <span class="dt">constraints =</span> <span class="op">~</span><span class="kw">fixallbut</span>(free))</code></pre></div>
 <p>And the output:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(mod.cross)</code></pre></div>
+<pre><code>## 
+## ==========================
+## Summary of model fit
+## ==========================
+## 
+## Formula:   mnet ~ edgecov_layer(&quot;edges&quot;, layer = 1) + edgecov_layer(&quot;edges&quot;, 
+##     layer = 2) + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, 
+##     layer = 2) + mutual(&quot;layer.mem&quot;, diff = T) + duplexdyad(c(&quot;e&quot;, 
+##     &quot;f&quot;), layers = c(1, 2))
+## 
+## Iterations:  2 out of 20 
+## 
+## Monte Carlo MLE Results:
+##                         Estimate Std. Error MCMC % z value Pr(&gt;|z|)    
+## edgecov.layer.1.edges   -3.30605    0.32552      0 -10.156  &lt; 1e-04 ***
+## edgecov.layer.2.edges   -1.38101    0.18485      0  -7.471  &lt; 1e-04 ***
+## edgecov.layer.1.prefsim -0.06769    0.10406      0  -0.650  0.51541    
+## edgecov.layer.2.prefsim  0.18143    0.06256      0   2.900  0.00373 ** 
+## mutual.same.layer.mem.1  2.36870    0.46990      0   5.041  &lt; 1e-04 ***
+## mutual.same.layer.mem.2  0.32628    0.22574      0   1.445  0.14834    
+## duplexdyad.e             1.30225    0.28795      0   4.522  &lt; 1e-04 ***
+## duplexdyad.f            -0.15899    0.30617      0  -0.519  0.60358    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+##      Null Deviance: 2412  on 1740  degrees of freedom
+##  Residual Deviance: 1493  on 1732  degrees of freedom
+##  
+## AIC: 1509    BIC: 1553    (Smaller is better.)</code></pre>
 </div>
 </div>
 

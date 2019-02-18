@@ -9,13 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 This document outlines how to use the `multilayer.ergm` package to fit exponential random graph models (ERGM) in `R`. The `multilayer.ergm` package extends functionalities of the `ergm` package to multilayer network applications by providing a way to count local network configurations, or network motifs, that span more than one network layer. This document assumes you have a working knowledge of ERGMs and multilayer networks as described in [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).
 
 
@@ -24,7 +17,7 @@ First, install the package from GitHub. To do so, you will need the `devtools` p
 
 ```{r, eval=FALSE}
 library(devtools)
-install_github("tedhchen/multilayer.ergm")
+install_github("tedhchen/multilayer.ergm", build_vignette = TRUE)
 ```
 
 Of course, we want to load the package, which will also load the `network`, `ergm`, and `statnet.common` packages.
@@ -126,7 +119,7 @@ Remember that layer 1 is `sci` and layer 2 is `infrep`. From the output we see t
 ### Policy Multiplex, Within-layer Model
 Now, let us fit a model that includes cross-layer dependence terms. Specifically, let us include, using `duplexdyad`, a term for cross-layer reinforcement and a term for cross-layer reciprocity. From the code below, we see that the `duplexdyad` term takes an argument `layers = c(1, 2)`. It means that the two layers included in the dependence term are layers 1 and 2. This format is common to cross-layer dependence terms in the `multilayer.ergm` package.
 
-```{r, eval=FALSE}
+```{r, message=FALSE}
 mod.cross <- ergm(mnet 
                   ~ edgecov_layer("edges", layer = 1) + edgecov_layer("edges", layer = 2)
                   + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, layer = 2)
@@ -137,6 +130,6 @@ mod.cross <- ergm(mnet
 ```
 
 And the output:
-```{r, eval=FALSE}
+```{r}
 summary(mod.cross)
 ```
