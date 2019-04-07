@@ -2141,3 +2141,144 @@ D_CHANGESTAT_FN(d_threetrail_crosslayer) {
 	CHANGE_STAT[0] = change;
 	UNDO_PREVIOUS_TOGGLES(i);
 }
+
+D_CHANGESTAT_FN(d_fourcycle_crosslayer){
+	/* Declaring variables */
+	int i, l1, l2, tl, hl, t_neighbour, h_neighbour, tnl, hnl, isedge, with_attr; 
+	Vertex tail, head, layer_mem[N_NODES];
+	Edge e1, e2;
+	double attn, change, nodecov[N_NODES];
+	
+	/* Layer memberships */
+	for(i = 0; i < N_NODES; i++){
+		layer_mem[i] = INPUT_PARAM[2 + i];
+	}
+	l1 = INPUT_PARAM[0]; l2 = INPUT_PARAM[1];
+	
+	/* If there are nodecovs to consider */
+	with_attr = N_INPUT_PARAMS > (N_NODES + 2);
+	if(with_attr){
+		for(i = 0; i < N_NODES; i++){
+		nodecov[i] = INPUT_PARAM[2 + N_NODES + i];
+		}
+	}
+	
+	/* Start looping through the edges */
+	CHANGE_STAT[0] = 0.0; change = 0.0;
+	FOR_EACH_TOGGLE(i){
+		tail = TAIL(i); head = HEAD(i);
+		isedge = IS_UNDIRECTED_EDGE(tail, head);
+		tl = layer_mem[tail - 1]; hl = layer_mem[head - 1];
+		attn = 0.0;
+		
+		if(with_attr){
+			attn = nodecov[tail - 1] + nodecov[head - 1];
+		}
+		
+		/* If the edge is intralayer */
+		if(tl == hl && ((tl == l1) || (tl == l2))){ /* All four combinations of out-out, out-in, in-out, and in-in. */
+			STEP_THROUGH_OUTEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_OUTEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == hnl && tnl != tl && ((tnl == l1) || (tnl == l2)) && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+			STEP_THROUGH_OUTEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_INEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == hnl && tnl != tl && ((tnl == l1) || (tnl == l2)) && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+			STEP_THROUGH_INEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_OUTEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == hnl && tnl != tl && ((tnl == l1) || (tnl == l2)) && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+			STEP_THROUGH_INEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_INEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == hnl && tnl != tl && ((tnl == l1) || (tnl == l2)) && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+		}
+		/* If the edge is interlayer */
+		if(tl != hl && ((tl == l1) || (tl == l2)) && ((hl == l1) || (hl == l2))){ /* All four combinations of out-out, out-in, in-out, and in-in. */
+			STEP_THROUGH_OUTEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_OUTEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == tl && hnl == hl && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+			STEP_THROUGH_OUTEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_INEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == tl && hnl == hl && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+			STEP_THROUGH_INEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_OUTEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == tl && hnl == hl && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){ 
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+			STEP_THROUGH_INEDGES(tail, e1, t_neighbour){
+				STEP_THROUGH_INEDGES(head, e2, h_neighbour){
+					tnl = layer_mem[t_neighbour - 1]; hnl = layer_mem[h_neighbour - 1];
+					if(tnl == tl && hnl == hl && IS_UNDIRECTED_EDGE(t_neighbour, h_neighbour)){ /* Conditions for a crosslayer four cycle */
+						if(with_attr){
+							change += (attn + nodecov[t_neighbour - 1] + nodecov[h_neighbour - 1]) * (isedge ? - 1 : 1);
+						} else {
+							change += (isedge ? - 1 : 1);
+						}
+					}
+				}
+			}
+		}
+		TOGGLE_IF_MORE_TO_COME(i);
+	}	
+	CHANGE_STAT[0] = change;
+	UNDO_PREVIOUS_TOGGLES(i);
+}

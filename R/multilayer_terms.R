@@ -519,7 +519,30 @@ InitErgmTerm.threetrail_crosslayer <- function(nw, arglist, ...) {
        minval = 0)
 }
 
+# Cross-layer four cycle
+InitErgmTerm.fourcycle_crosslayer <- function(nw, arglist, ...){
+  a <- check.ErgmTerm(nw, arglist, directed = FALSE,
+                      varnames = c("layers", "attrname"),
+                      vartypes = c("numeric", "character"),
+                      defaultvalues = list(c(1, 2), NULL),
+                      required = c(FALSE, FALSE))
+  if(length(unique(a$layers)) != 2){stop("fourcycle_crosslayer() requires two different layers.", call. = FALSE)}
 
+  layer.mem <- get.node.attr(nw, "layer.mem")
+  if(length(a$attrname) > 0){
+    nodecov <- get.node.attr(nw, a$attrname)
+  } else {
+    nodecov <- NULL
+  }
+  
+  list(name = "fourcycle_crosslayer", 
+       coef.names = paste("fourcycle_crosslayer.", paste0(a$layers, collapse = ""), 
+                          ifelse(length(a$attrname) > 0, paste(".", a$attrname, sep = ""), ""), sep = ""),
+       pkgname = "multilayer.ergm",
+       inputs = c(a$layers, layer.mem, nodecov),
+       dependence = TRUE, minval = 0
+  )
+}
 
 
 
