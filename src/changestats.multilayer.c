@@ -125,6 +125,98 @@ D_CHANGESTAT_FN(d_duplexdyad){
 	UNDO_PREVIOUS_TOGGLES(i);
 }
 
+D_CHANGESTAT_FN(d_gwdsp) { 
+	Edge e, f;
+	int i, echange, ochange;
+	int L2tu, L2uh, l, layer_mem[N_NODES];
+	Vertex tail, head, u, v;
+	double alpha, oneexpa, cumchange;
+	
+	/* *** don't forget tail -> head */    
+	CHANGE_STAT[0] = 0.0;
+	alpha = INPUT_PARAM[0];
+	oneexpa = 1.0-exp(-alpha);
+	l = INPUT_PARAM[1];
+	for(i = 0; i < N_NODES; i++){
+		layer_mem[i] = INPUT_PARAM[2 + i];
+	}
+	
+	FOR_EACH_TOGGLE(i){
+		tail = TAIL(i); head = HEAD(i);
+		if(layer_mem[tail - 1] == l && layer_mem[head - 1] == l){
+			cumchange=0.0;
+			ochange = IS_OUTEDGE(tail, head) ? -1 : 0;
+			echange = 2*ochange + 1;
+			/* step through outedges of head */
+			STEP_THROUGH_OUTEDGES(head, e, u){
+				if (u != tail && layer_mem[u - 1] == l){
+					L2tu=ochange;
+					/* step through outedges of u */
+					STEP_THROUGH_OUTEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, tail) && layer_mem[v - 1] == l) L2tu++;
+					}
+					/* step through inedges of u */
+					STEP_THROUGH_INEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, tail) && layer_mem[v - 1] == l) L2tu++;
+					}
+					cumchange += pow(oneexpa,(double)L2tu);
+				}
+			}
+			/* step through inedges of head */
+			STEP_THROUGH_INEDGES(head, e, u){
+				if (u != tail && layer_mem[u - 1] == l){
+					L2tu=ochange;
+					/* step through outedges of u */
+					STEP_THROUGH_OUTEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, tail) && layer_mem[v - 1] == l) L2tu++;
+					}
+					/* step through inedges of u */
+					STEP_THROUGH_INEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, tail) && layer_mem[v - 1] == l) L2tu++;
+					}
+					cumchange += pow(oneexpa,(double)L2tu);
+				}
+			}
+			
+			/* step through outedges of tail  */
+			STEP_THROUGH_OUTEDGES(tail, e, u){
+				if (u != head && layer_mem[u - 1] == l){
+					L2uh=ochange;
+					/* step through outedges of u */
+					STEP_THROUGH_OUTEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, head) && layer_mem[v - 1] == l) L2uh++;
+					}
+					/* step through inedges of u */
+					STEP_THROUGH_INEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, head) && layer_mem[v - 1] == l) L2uh++;
+					}
+					cumchange += pow(oneexpa,(double)L2uh);
+				}
+			}
+			/* step through inedges of tail */
+			STEP_THROUGH_INEDGES(tail, e, u){
+				if (u != head && layer_mem[u - 1] == l){
+					L2uh=ochange;
+					/* step through outedges of u */
+					STEP_THROUGH_OUTEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, head) && layer_mem[v - 1] == l) L2uh++;
+					}
+					/* step through inedges of u */
+					STEP_THROUGH_INEDGES(u, f, v){
+						if(IS_UNDIRECTED_EDGE(v, head) && layer_mem[v - 1] == l) L2uh++;
+					}
+					cumchange += pow(oneexpa,(double)L2uh);
+				}
+			}
+			cumchange  = echange*cumchange;
+			(CHANGE_STAT[0]) += cumchange;
+		}
+		
+		TOGGLE_IF_MORE_TO_COME(i);
+	}
+  UNDO_PREVIOUS_TOGGLES(i);
+}
+
 D_CHANGESTAT_FN(d_gwtdsp_layer) {
 	Edge e, f;
 	int i, echange, ochange, L2tu, L2uh, l, layer_mem[N_NODES];
