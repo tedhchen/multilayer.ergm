@@ -15,5 +15,5 @@ To install this package from [github](https://github.com/tedhchen/multilayer.erg
 
 ``` r
 library(devtools)
-devtools::install_github("tedchen/multilayer.ergm", build_vignettes = TRUE)
+devtools::install_github("tedhchen/multilayer.ergm", build_vignettes = TRUE)
 ```
