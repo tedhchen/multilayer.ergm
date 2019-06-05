@@ -25,7 +25,7 @@ This package extends the exponential random graph model (ERGM) to multilayer net
 To install this package from [github](https://github.com/tedhchen/multilayer.ergm), enter the following into your R console. The argument ``build_vignettes`` can be set to ``FALSE`` if you do not require the package tutorial.
 ```{r, eval=F}
 library(devtools)
-devtools::install_github("tedchen/multilayer.ergm", build_vignettes = TRUE)
+devtools::install_github("tedhchen/multilayer.ergm", build_vignettes = TRUE)
 ```
 
 
