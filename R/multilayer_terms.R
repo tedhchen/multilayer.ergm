@@ -24,7 +24,7 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
       if(a$x == "edges"){
         xm <- matrix(1, ncol = layer.size, nrow = layer.size)
       } else {
-        stop("If supplying a network attribute, use edgecov() instead.",call.=FALSE)
+        stop("If supplying a network attribute of the multilayer network object, use edgecov() instead.",call.=FALSE)
       }
     } else {
       if(is.network(a$x)){
@@ -48,7 +48,7 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
       if(a$x == "edges"){
         xm <- matrix(1, nrow = layer.size1, ncol = layer.size2)
       } else {
-        stop("If supplying a network attribute, use edgecov() instead.",call.=FALSE)
+        stop("If supplying a network attribute of the multilayer network object, use edgecov() instead.",call.=FALSE)
       }
     } else {
       if(is.network(a$x)){
@@ -84,6 +84,12 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
        maxval = sum(c(xm.l)[c(xm.l)>0]),
        pkgname = "ergm"
   )
+}
+
+InitErgmTerm.edges_layer <- function(nw, layer) {
+  temp <- InitErgmTerm.edgecov_layer(nw, list(x = "edges", layer = layer))
+  temp$coef.names <- paste("edges_layer", layer, sep = ".")
+  temp
 }
 
 # 1.2 Degree within layer
