@@ -86,9 +86,12 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   )
 }
 
-InitErgmTerm.edges_layer <- function(nw, layer) {
-  temp <- InitErgmTerm.edgecov_layer(nw, list(x = "edges", layer = layer))
-  temp$coef.names <- paste("edges_layer", layer, sep = ".")
+InitErgmTerm.edges_layer <- function(nw, arglist, ...) {
+  if(is.null(arglist$layer)){
+    stop("Layer not specified.",call.=FALSE)
+  }
+  temp <- InitErgmTerm.edgecov_layer(nw, list(x = "edges", layer = arglist$layer))
+  temp$coef.names <- paste("edges_layer", arglist$layer, sep = ".")
   temp
 }
 
