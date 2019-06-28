@@ -376,7 +376,7 @@ InitErgmTerm.gwesp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
                       required = c(FALSE, FALSE, FALSE, TRUE))
   
   if(a$fixed != TRUE){
-    stop("The current version of gwdsp_layer() only allows for fixed decay values.", call.=FALSE)
+    stop("The current version of gwesp_layer() only allows for fixed decay values.", call.=FALSE)
   }
   
   decay<-a$decay
