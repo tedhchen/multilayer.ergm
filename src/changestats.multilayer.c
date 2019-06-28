@@ -125,7 +125,7 @@ D_CHANGESTAT_FN(d_duplexdyad){
 	UNDO_PREVIOUS_TOGGLES(i);
 }
 
-D_CHANGESTAT_FN(d_gwdsp) { 
+D_CHANGESTAT_FN(d_gwdsp_layer) { 
 	Edge e, f;
 	int i, echange, ochange;
 	int L2tu, L2uh, l, layer_mem[N_NODES];
@@ -267,7 +267,7 @@ D_CHANGESTAT_FN(d_gwtdsp_layer) {
 	UNDO_PREVIOUS_TOGGLES(i);
 }
 
-D_CHANGESTAT_FN(d_gwesp) { 
+D_CHANGESTAT_FN(d_gwesp_layer) { 
 	Edge e, f;
 	int i, echange, ochange;
 	int L2th, L2tu, L2uh, l, layer_mem[N_NODES];
