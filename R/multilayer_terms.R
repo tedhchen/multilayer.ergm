@@ -348,7 +348,7 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   a <- check.ErgmTerm(nw, arglist,
                       varnames = c("decay","fixed","cutoff","layer"),
                       vartypes = c("numeric","logical","numeric","numeric"),
-                      defaultvalues = list(0, TRUE, 30, NULL),
+                      defaultvalues = list(0, TRUE, NULL, NULL),
                       required = c(FALSE, FALSE, FALSE, TRUE))
   
   if(a$fixed != TRUE){
@@ -372,7 +372,7 @@ InitErgmTerm.gwesp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   a <- check.ErgmTerm(nw, arglist,
                       varnames = c("decay","fixed","cutoff","layer"),
                       vartypes = c("numeric","logical","numeric", "numeric"),
-                      defaultvalues = list(0, TRUE, 30, NULL),
+                      defaultvalues = list(0, TRUE, NULL, NULL),
                       required = c(FALSE, FALSE, FALSE, TRUE))
   
   if(a$fixed != TRUE){
@@ -404,8 +404,8 @@ InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
   a <- check.ErgmTerm(nw, arglist, directed = TRUE, bipartite = FALSE,
                       varnames = c("type", "layers"),
                       vartypes = c("character", "numeric"),
-                      defaultvalues = list(NULL, c(1,2)),
-                      required = c(TRUE, FALSE))
+                      defaultvalues = list(NULL, NULL),
+                      required = c(TRUE, TRUE))
   
   # Error messages for misspecified arguments.
   if(length(unique(a$layers))!=2){stop("duplexdyad() requires two different layers.")}
@@ -486,8 +486,8 @@ InitErgmTerm.fourcycle_crosslayer <- function(nw, arglist, ...){
   a <- check.ErgmTerm(nw, arglist, directed = FALSE,
                       varnames = c("layers", "attrname"),
                       vartypes = c("numeric", "character"),
-                      defaultvalues = list(c(1, 2), NULL),
-                      required = c(FALSE, FALSE))
+                      defaultvalues = list(NULL, NULL),
+                      required = c(TRUE, FALSE))
   if(length(unique(a$layers)) != 2){stop("fourcycle_crosslayer() requires two different layers.", call. = FALSE)}
 
   layer.mem <- get.node.attr(nw, "layer.mem")
