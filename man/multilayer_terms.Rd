@@ -37,7 +37,7 @@ This set of network terms are used to computed network statistics over a single 
     This terms adds one network statistic to the model equal to a weighted alternating sequence of \emph{k}-star statistics with weight parameter \code{lambda} on the network layer specified by \code{layer}. In this version of the statistic, \code{lambda}, the decay parameter, is fixed at the supplied value. See \code{?altkstar} for the monoplex version.}
     
     \item{\code{degree_layer(d, layer)} (undirected)}{\emph{Degree, within layer:}
-    This term adds one network statistic for each element in \code{d}, which are numeric values, equal to the number of nodes on the network layer specified by \code{layer} with \code{d[i]} intralayer edges (i.e. those on the same layer). When \code{d = 0}, this term is a count of isolates on the specified layer. See \code{?degree} for the monoplex version.
+    This term adds one network statistic for each element in \code{d}, which are numeric values, equal to the number of nodes on the network layer specified by \code{layer} with \code{d[i]} intralayer edges (i.e. those on the same layer). When \code{d = 0}, this term is a count of isolates on the specified layer.
     }
     
     \item{\code{edgecov_layer(x, attrname, layer)} (directed, undirected)}{\emph{Edge covariate, within layer:}
@@ -58,7 +58,9 @@ This set of network terms are used to computed network statistics over a single 
     This term adds one network statistic for each element in \code{k}, which are numeric values, equal to the number of \code{k[i]}-stars on the network layer specified by \code{layer}. If \code{attrname} is specified, the count of within layer \emph{k}-stars includes only those with the same specified nodal attribute. See \code{?kstar} for the monoplex version.
     }
     
-    \item{\code{nodecov_layer(attrname, layer)} (directed, undirected)}{\emph{Quantitative nodal attribute, within layer:}}
+    \item{\code{nodecov_layer(attrname, layer)} (directed, undirected)}{\emph{Quantitative nodal attribute, within layer:}
+    This term adds one network statistic for each element in \code{attrname}, which are quantitative node attributes, equal to the edgewise sum of the attribute over all edges on the network layer specified by \code{layer}. See \code{?nodecov} for the monoplex version.
+    }
     
     \item{\code{nodefactor_layer(attrname, base = 1, levels, layer)} (directed, undirected)}{\emph{Categorical nodal attribute, within layer:}}
     
