@@ -37,28 +37,34 @@ This set of network terms are used to computed network statistics over a single 
     This terms adds one network statistic to the model equal to a weighted alternating sequence of \emph{k}-star statistics with weight parameter \code{lambda} on the network layer specified by \code{layer}. In this version of the statistic, \code{lambda}, the decay parameter, is fixed at the supplied value. See \code{?altkstar} for the monoplex version.}
     
     \item{\code{degree_layer(d, layer)} (undirected)}{\emph{Degree, within layer:}
-    This term adds one network statistic for each element in \code{d}, which are numeric values, equal to the number of nodes on the network layer specified by \code{layer} with \code{d_i} intralayer edges (i.e. those on the same layer). When \code{d = 0}, this term is a count of isolates on the specified layer.}
+    This term adds one network statistic for each element in \code{d}, which are numeric values, equal to the number of nodes on the network layer specified by \code{layer} with \code{d[i]} intralayer edges (i.e. those on the same layer). When \code{d = 0}, this term is a count of isolates on the specified layer. See \code{?degree} for the monoplex version.
+    }
     
     \item{\code{edgecov_layer(x, attrname, layer)} (directed, undirected)}{\emph{Edge covariate, within layer:}
     This term adds one network statistic to the model equal to the sum of the covariate values for each edge that appears on the network layer specified by \code{layer}. The covariate is specified using the \code{x} argument, as a \code{matrix} or \code{network} object with the same size as the network layer. If \code{x} is a \code{network} object, argument \code{attrname} can be used to specify an edge attribute from the network. If the \code{x} argument is specified as \code{"edges"}, the \code{edges_layer} term is returned for the specified network layer.
     }
     
     \item{\code{edges_layer(layer)} (directed, undirected)}{\emph{Edges, within layer:}
-    This term adds one network statistic to the model equal to the number of edges on the network layer specified in \code{layer}.}
+    This term adds one network statistic to the model equal to the number of edges on the network layer specified in \code{layer}.
+    }
     
-    \item{\code{gwdsp_layer(decay = 0, fixed = TRUE, cutoff, layer)} (directed, undirected)}
+    \item{\code{gwdsp_layer(decay = 0, fixed = TRUE, cutoff, layer)} (directed, undirected)}{\emph{Geometrically-weighted dyadwise shared partner distribution, within layer:}
+    }
     
-    \item{\code{gwesp_layer(decay = 0, fixed = TRUE, cutoff, layer)} (directed, undirected)}
+    \item{\code{gwesp_layer(decay = 0, fixed = TRUE, cutoff, layer)} (directed, undirected)}{\emph{Geometrically-weighted edgewise shared partner distribution, within layer:}
+    }
     
-    \item{\code{kstar_layer(k, attrname, levels, layer)} (undirected)}
+    \item{\code{kstar_layer(k, attrname, levels, layer)} (undirected)}{\emph{k-star, within layer:}
+    This term adds one network statistic for each element in \code{k}, which are numeric values, equal to the number of \code{k[i]}-stars on the network layer specified by \code{layer}. If \code{attrname} is specified, the count of within layer \emph{k}-stars includes only those with the same specified nodal attribute. See \code{?kstar} for the monoplex version.
+    }
     
-    \item{\code{nodecov_layer(attrname, layer)} (directed, undirected)}
+    \item{\code{nodecov_layer(attrname, layer)} (directed, undirected)}{\emph{Quantitative nodal attribute, within layer:}}
     
-    \item{\code{nodefactor_layer(attrname, base = 1, levels, layer)} (directed, undirected)}
+    \item{\code{nodefactor_layer(attrname, base = 1, levels, layer)} (directed, undirected)}{\emph{Categorical nodal attribute, within layer:}}
     
-    \item{\code{nodeifactor_layer(attrname, base = 1, levels, layer)} (directed)}
+    \item{\code{nodeifactor_layer(attrname, base = 1, levels, layer)} (directed)}{\emph{Categorical receiver attribute, within layer:}}
     
-    \item{\code{nodeofactor_layer(attrname, base = 1, levels, layer)} (directed)}
+    \item{\code{nodeofactor_layer(attrname, base = 1, levels, layer)} (directed)}{\emph{Categorical sender attribute, within layer:}}
     
   }
 }
