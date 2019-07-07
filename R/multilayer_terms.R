@@ -346,10 +346,10 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   #   ergm.checkdirected("gwdsp", is.directed(nw), requirement=FALSE)
   # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>  
   a <- check.ErgmTerm(nw, arglist,
-                      varnames = c("decay","fixed","cutoff","layer"),
-                      vartypes = c("numeric","logical","numeric","numeric"),
-                      defaultvalues = list(0, TRUE, NULL, NULL),
-                      required = c(FALSE, FALSE, FALSE, TRUE))
+                      varnames = c("decay","fixed","layer"),
+                      vartypes = c("numeric","logical","numeric"),
+                      defaultvalues = list(0, TRUE, NULL),
+                      required = c(FALSE, FALSE, TRUE))
   
   if(a$fixed != TRUE){
     stop("The current version of gwdsp_layer() only allows for fixed decay values.", call.=FALSE)
@@ -370,10 +370,10 @@ InitErgmTerm.gwesp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   #   ergm.checkdirected("gwesp", is.directed(nw), requirement=FALSE)
   # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>  
   a <- check.ErgmTerm(nw, arglist,
-                      varnames = c("decay","fixed","cutoff","layer"),
-                      vartypes = c("numeric","logical","numeric", "numeric"),
-                      defaultvalues = list(0, TRUE, NULL, NULL),
-                      required = c(FALSE, FALSE, FALSE, TRUE))
+                      varnames = c("decay","fixed","layer"),
+                      vartypes = c("numeric","logical", "numeric"),
+                      defaultvalues = list(0, TRUE, NULL),
+                      required = c(FALSE, FALSE, TRUE))
   
   if(a$fixed != TRUE){
     stop("The current version of gwesp_layer() only allows for fixed decay values.", call.=FALSE)
