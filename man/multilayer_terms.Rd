@@ -22,7 +22,7 @@
 \title{Terms used in Multilayer Network Applications of Exponential Random Graph Models}
 
 \description{
-  This page documents the terms that can be used for fitting exponential random graph models of multilayer networks using the function \code{\link[ergm]{ergm}} from the \code{\link[ergm:ergm-package]{ergm}} package. These terms work best with version 3.9.4 of the \code{ergm} package; version 3.10.x onward has a different way of specifying levels for \code{nodefactor}-type terms. Future versions of \code{multilayer.ergm} will contain updates to factor level specification to be consistent with \code{ergm}. 
+  This page documents the terms that can be used for fitting exponential random graph models of multilayer networks using the function \code{\link[ergm]{ergm}} from the \code{\link[ergm:ergm-package]{ergm}} package. These terms work best with version 3.9.4 of the \code{ergm} package; version 3.10.x onward has a different way of specifying levels for \code{nodefactor}-type terms. Future versions of \code{multilayer.ergm} will contain updates to factor level specification to be consistent with \code{ergm} versions >3.9.4. 
   
   The terms included here are used in the same manner as \code{\link[ergm]{ergm-terms}} from the base \code{ergm} package. This means that in addition to fitting ERGMs, they can be used for network simulation (\code{\link[ergm]{simulate.ergm}}) and assessing goodness-of-fit (\code{\link[ergm]{mcmc.diagnostics}} and \code{\link[ergm]{gof}}).
   
@@ -62,11 +62,16 @@ This set of network terms are used to computed network statistics over a single 
     This term adds one network statistic for each element in \code{attrname}, which are quantitative node attributes, equal to the edgewise sum of the attribute over all edges on the network layer specified by \code{layer}. See \code{?nodecov} for the monoplex version.
     }
     
-    \item{\code{nodefactor_layer(attrname, base = 1, levels, layer)} (directed, undirected)}{\emph{Categorical nodal attribute, within layer:}}
+    \item{\code{nodefactor_layer(attrname, base = 1, layer)} (directed, undirected)}{\emph{Categorical nodal attribute, within layer:}
+    This terms adds one or more network statistics that counts the number of times a node with the combination of attributes specified by \code{attrname} appears on an edge on the network layer specified by \code{layer}. By default (i.e. when \code{base = 1}), all combinations of specified attributes are counted with the exception of the first category. More specifically, \code{base} specifies the levels of attribute combinations to omit. (\code{simulate(nw~nodefactor_layer(...))} is an easy way to see the order of all attribute combinations.))
+    }
     
-    \item{\code{nodeifactor_layer(attrname, base = 1, levels, layer)} (directed)}{\emph{Categorical receiver attribute, within layer:}}
+    \item{\code{nodeifactor_layer(attrname, base = 1, layer)} (directed)}{\emph{Categorical receiver attribute, within layer:}
+    This terms adds one or more network statistics that counts the number of times a \emph{receiver} node with the combination of attributes specified by \code{attrname} appears on an edge on the network layer specified by \code{layer}. By default (i.e. when \code{base = 1}), all combinations of specified attributes are counted with the exception of the first category. More specifically, \code{base} specifies the levels of attribute combinations to omit. (\code{simulate(nw~nodefactor_layer(...))} is an easy way to see the order of all attribute combinations.))}
     
-    \item{\code{nodeofactor_layer(attrname, base = 1, levels, layer)} (directed)}{\emph{Categorical sender attribute, within layer:}}
+    \item{\code{nodeofactor_layer(attrname, base = 1, layer)} (directed)}{\emph{Categorical sender attribute, within layer:}
+        This terms adds one or more network statistics that counts the number of times a \emph{sender} node with the combination of attributes specified by \code{attrname} appears on an edge on the network layer specified by \code{layer}. By default (i.e. when \code{base = 1}), all combinations of specified attributes are counted with the exception of the first category. More specifically, \code{base} specifies the levels of attribute combinations to omit. (\code{simulate(nw~nodefactor_layer(...))} is an easy way to see the order of all attribute combinations.))}
+}
     
   }
 }
