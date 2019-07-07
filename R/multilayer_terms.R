@@ -126,10 +126,10 @@ InitErgmTerm.degree_layer<-function(nw, arglist, ...) {
 InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, 
-                      varnames = c("attrname", "base", "levels", "layer"),
-                      vartypes = c("character", "numeric", "character,numeric,logical", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL, NULL),
-                      required = c(TRUE, FALSE, FALSE, TRUE))
+                      varnames = c("attrname", "base", "layer"),
+                      vartypes = c("character", "numeric", "numeric"),
+                      defaultvalues = list(NULL, 1, NULL),
+                      required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
   
   nodecov <-
@@ -139,7 +139,7 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
     do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
   }
   
-  u <- NVL(a$levels, sort(unique(nodecov)))
+  u <- sort(unique(nodecov))
   if (any(NVL(a$base,0)!=0)) {
     u <- u[-a$base]
     if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
@@ -171,10 +171,10 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
 InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
-                      varnames = c("attrname", "base", "levels", "layer"),
-                      vartypes = c("character", "numeric", "character,numeric,logical", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL, NULL),
-                      required = c(TRUE, FALSE, FALSE, TRUE))
+                      varnames = c("attrname", "base", "layer"),
+                      vartypes = c("character", "numeric", "numeric"),
+                      defaultvalues = list(NULL, 1, NULL),
+                      required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
   
   nodecov <-
@@ -184,7 +184,7 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
     do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
   }
   
-  u <- NVL(a$levels, sort(unique(nodecov)))
+  u <- sort(unique(nodecov))
   if (any(NVL(a$base,0)!=0)) {
     u <- u[-a$base]
     if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
@@ -216,10 +216,10 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
 InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
-                      varnames = c("attrname", "base", "levels", "layer"),
-                      vartypes = c("character", "numeric", "character,numeric,logical", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL, NULL),
-                      required = c(TRUE, FALSE, FALSE, TRUE))
+                      varnames = c("attrname", "base", "layer"),
+                      vartypes = c("character", "numeric", "numeric"),
+                      defaultvalues = list(NULL, 1, NULL),
+                      required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
   nodecov <-
     if(length(a$attrname)==1)
@@ -228,7 +228,7 @@ InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
     do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
   }
   
-  u <- NVL(a$levels, sort(unique(nodecov)))
+  u <- sort(unique(nodecov))
   if (any(NVL(a$base,0)!=0)) {
     u <- u[-a$base]
     if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
