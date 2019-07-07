@@ -34,24 +34,26 @@ This set of network terms are used to computed network statistics over a single 
   \describe{
     
     \item{\code{altkstar.fixed_layer(lambda = 2, layer)} (undirected)}{\emph{Alternating k-star, within layer, fixed lambda:}
-    This terms adds one network statistic to the model equal to a weighted alternating sequence of \emph{k}-star statistics with weight parameter \code{lambda} on the network layer specified by \code{layer}. In this version of the statistic, \code{lambda}, the decay parameter, is fixed at the supplied value. See \code{?altkstar} for the monoplex version.}
+    This terms adds one network statistic equal to a weighted alternating sequence of \emph{k}-star statistics with weight parameter \code{lambda} on the network layer specified by \code{layer}. In this version of the statistic, \code{lambda}, the decay parameter, is fixed at the supplied value. See \code{?altkstar} for the monoplex version.}
     
     \item{\code{degree_layer(d, layer)} (undirected)}{\emph{Degree, within layer:}
     This term adds one network statistic for each element in \code{d}, which are numeric values, equal to the number of nodes on the network layer specified by \code{layer} with \code{d[i]} intralayer edges (i.e. those on the same layer). When \code{d = 0}, this term is a count of isolates on the specified layer.
     }
     
     \item{\code{edgecov_layer(x, attrname, layer)} (directed, undirected)}{\emph{Edge covariate, within layer:}
-    This term adds one network statistic to the model equal to the sum of the covariate values for each edge that appears on the network layer specified by \code{layer}. The covariate is specified using the \code{x} argument, as a \code{matrix} or \code{network} object with the same size as the network layer. If \code{x} is a \code{network} object, argument \code{attrname} can be used to specify an edge attribute from the network. If the \code{x} argument is specified as \code{"edges"}, the \code{edges_layer} term is returned for the specified network layer.
+    This term adds one network statistic equal to the sum of the covariate values for each edge that appears on the network layer specified by \code{layer}. The covariate is specified using the \code{x} argument, as a \code{matrix} or \code{network} object with the same size as the network layer. If \code{x} is a \code{network} object, argument \code{attrname} can be used to specify an edge attribute from the network. If the \code{x} argument is specified as \code{"edges"}, the \code{edges_layer} term is returned for the specified network layer.
     }
     
     \item{\code{edges_layer(layer)} (directed, undirected)}{\emph{Edges, within layer:}
-    This term adds one network statistic to the model equal to the number of edges on the network layer specified in \code{layer}.
+    This term adds one network statistic equal to the number of edges on the network layer specified in \code{layer}.
     }
     
-    \item{\code{gwdsp_layer(decay = 0, fixed = TRUE, cutoff, layer)} (directed, undirected)}{\emph{Geometrically-weighted dyadwise shared partner distribution, within layer:}
+    \item{\code{gwdsp_layer(decay = 0, fixed = TRUE, layer)} (directed, undirected)}{\emph{Geometrically-weighted dyadwise shared partner distribution, within layer:}
+    This term adds one network statistic equal to the geometrically-weighted dyadwise shared partner distribution on the network layer specified by \code{layer}, with decay parameter specified by \code{decay}. For directed networks, only partners on a directed two path connecting the nodes in the dyad are counted.
     }
     
-    \item{\code{gwesp_layer(decay = 0, fixed = TRUE, cutoff, layer)} (directed, undirected)}{\emph{Geometrically-weighted edgewise shared partner distribution, within layer:}
+    \item{\code{gwesp_layer(decay = 0, fixed = TRUE, layer)} (directed, undirected)}{\emph{Geometrically-weighted edgewise shared partner distribution, within layer:}
+    This term adds one network statistic equal to the geometrically-weighted edgewise shared partner distribution on the network layer specified by \code{layer}, with decay parameter specified by \code{decay}. For directed networks, only partners on a directed two path in the same direction of the edge are counted.
     }
     
     \item{\code{kstar_layer(k, attrname, levels, layer)} (undirected)}{\emph{k-star, within layer:}
