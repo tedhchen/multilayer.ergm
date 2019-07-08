@@ -417,7 +417,7 @@ InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
   list(name = "duplexdyad", 
        coef.names = paste("duplexdyad.", a$type, sep=""),
        pkgname = "multilayer.ergm",
-       inputs = c(a$layers, type, layer.mem),
+       inputs = c(unlist(a$layers), type, layer.mem),
        dependence = TRUE
   )
 }
@@ -501,7 +501,7 @@ InitErgmTerm.fourcycle_crosslayer <- function(nw, arglist, ...){
        coef.names = paste("fourcycle_crosslayer.", paste0(a$layers, collapse = ""), 
                           ifelse(length(a$attrname) > 0, paste(".", a$attrname, sep = ""), ""), sep = ""),
        pkgname = "multilayer.ergm",
-       inputs = c(a$layers, layer.mem, nodecov),
+       inputs = c(unlist(a$layers), layer.mem, nodecov),
        dependence = TRUE, minval = 0
   )
 }
