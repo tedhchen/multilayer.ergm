@@ -403,7 +403,7 @@ InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
   # Initial check
   a <- check.ErgmTerm(nw, arglist, directed = TRUE, bipartite = FALSE,
                       varnames = c("type", "layers"),
-                      vartypes = c("character", "numeric"),
+                      vartypes = c("character", "list"),
                       defaultvalues = list(NULL, NULL),
                       required = c(TRUE, TRUE))
   
@@ -485,7 +485,7 @@ InitErgmTerm.threetrail_crosslayer <- function(nw, arglist, ...) {
 InitErgmTerm.fourcycle_crosslayer <- function(nw, arglist, ...){
   a <- check.ErgmTerm(nw, arglist, directed = FALSE,
                       varnames = c("layers", "attrname"),
-                      vartypes = c("numeric", "character"),
+                      vartypes = c("list", "character"),
                       defaultvalues = list(NULL, NULL),
                       required = c(TRUE, FALSE))
   if(length(unique(a$layers)) != 2){stop("fourcycle_crosslayer() requires two different layers.", call. = FALSE)}
