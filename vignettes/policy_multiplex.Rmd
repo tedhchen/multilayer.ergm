@@ -15,9 +15,9 @@ This document outlines how to use the `multilayer.ergm` package to fit exponenti
 ## Installation
 First, install the package from GitHub. To do so, you will need the `devtools` package. If you are on a Windows machine, you will also need the standalone [Rtools](https://cran.r-project.org/bin/windows/Rtools/). If you do not already have the `network`, `ergm`, and `statnet.common` packages, installing `multilayer.ergm` will install them as well. 
 
-```{r, eval=FALSE}
-library(devtools)
-install_github("tedhchen/multilayer.ergm", build_vignettes = TRUE)
+Install the package by entering the following into your R console. The argument ``build_opts`` can be removed entirely if you do not require the package tutorial.
+```{r, eval=F}
+devtools::install_github("tedhchen/multilayer.ergm", build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 Of course, we want to load the package, which will also load the `network`, `ergm`, and `statnet.common` packages.
@@ -80,7 +80,7 @@ mod.monoplex <- ergm(scinet ~ edges + edgecov(prefsim) + mutual,
                      control = control.ergm(seed = 206424))
 ```
 
-(In case anyone is interested `206424` is based on weather statistics in State College, PA when I wrote this: -2$^\circ$C, 0% precipitation, 64% humidity, and a wind speed of 24km/h.)
+(In case anyone is interested `206424` is based on weather statistics in State College, PA when I wrote this vignette: -2&deg;C, 0% precipitation, 64% humidity, and a wind speed of 24km/h.)
 
 Let us look at the output:
 ```{r}
@@ -98,11 +98,11 @@ free <- to.multiplex(matrix(1, ncol = 30, nrow = 30), matrix(1, ncol = 30, nrow 
 
 Now we can fit ERGMs of the multiplex network. Let us look at what happens when we fit an ERGM to a multiplex network but do not include any terms that capture dependence across layers.
 
-This within-layer model has the same terms as the previous monoplex model, for both network layers. The `multilayer.ergm` package includes a set of within-layer terms for multilayer networks. They are usually named after their `ergm` counterparts, but with `_layer` appended to the end. They also usually require an argument `layer`, which indicates which layer the term should be computed on.
+This within-layer model has the same terms as the previous monoplex model, for both network layers. The `multilayer.ergm` package includes a set of within-layer terms for multilayer networks. They are usually named after their `ergm` counterparts, but with `_layer` appended to the end. They also usually require an argument `layer`, which indicates which layer the term should be computed on. For a list of network terms that are available for multilayer networks, see `?multilayer_terms`.
 
 ```{r, message=FALSE}
 mod.within <- ergm(mnet
-                   ~ edgecov_layer("edges", layer = 1) + edgecov_layer("edges", layer = 2)
+                   ~ edges_layer(layer = 1) + edges_layer(layer = 2)
                    + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, layer = 2)
                    + mutual("layer.mem", diff = T),
                    control = control.ergm(seed = 206424),
@@ -117,14 +117,14 @@ summary(mod.within)
 Remember that layer 1 is `sci` and layer 2 is `infrep`. From the output we see that the coefficients for the scientific layer is effectively the same as those from the monoplex model. (In fact, the only difference is due to randomness in the estimation procedure.) This is to be expected, because while two layers are included, we did not model any dependence between them, meaning that they do not influence each other at all.
 
 ### Policy Multiplex, Within-layer Model
-Now, let us fit a model that includes cross-layer dependence terms. Specifically, let us include, using `duplexdyad`, a term for cross-layer reinforcement and a term for cross-layer reciprocity. From the code below, we see that the `duplexdyad` term takes an argument `layers = c(1, 2)`. It means that the two layers included in the dependence term are layers 1 and 2. This format is common to cross-layer dependence terms in the `multilayer.ergm` package.
+Now, let us fit a model that includes cross-layer dependence terms. Specifically, let us include, using `duplexdyad`, a term for cross-layer reinforcement and a term for cross-layer reciprocity. From the code below, we see that the `duplexdyad` term takes an argument `layers = list(1, 2)`. It means that the two layers included in the dependence term are layers 1 and 2. This format is common to cross-layer dependence terms in the `multilayer.ergm` package.
 
 ```{r, message=FALSE}
 mod.cross <- ergm(mnet 
-                  ~ edgecov_layer("edges", layer = 1) + edgecov_layer("edges", layer = 2)
+                  ~ edges_layer(layer = 1) + edges_layer(layer = 2)
                   + edgecov_layer(prefsim, layer = 1) + edgecov_layer(prefsim, layer = 2)
                   + mutual("layer.mem", diff = T)
-                  + duplexdyad(c("e","f"), layers = c(1,2)),
+                  + duplexdyad(c("e", "f"), layers = list(1, 2)),
                   control = control.ergm(seed = 206424),
                   constraints = ~fixallbut(free))
 ```
