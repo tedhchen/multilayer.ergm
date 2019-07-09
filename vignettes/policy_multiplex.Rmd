@@ -2,7 +2,7 @@
 title: "Illustrating the multilayer.ergm Package with a Multiplex Policy Network"
 author: "Ted Hsuan Yun Chen"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{Illustrating the multilayer.ergm Package with a Multiplex Policy Network}
   %\VignetteEngine{knitr::rmarkdown}
@@ -60,9 +60,6 @@ mnet%v%'layer.mem'
 check.multilayer(mnet)
 ```
 
-### Plotting Multilayer Networks
-      In progress.
-
 ## ERGMs for Multilayer Networks
 Now that we have constructed our multilayer network `mnet`, we can fit an ERGM. Let us work our way up from a monoplex approach to the scientific communication network.
 
@@ -116,7 +113,7 @@ summary(mod.within)
 
 Remember that layer 1 is `sci` and layer 2 is `infrep`. From the output we see that the coefficients for the scientific layer is effectively the same as those from the monoplex model. (In fact, the only difference is due to randomness in the estimation procedure.) This is to be expected, because while two layers are included, we did not model any dependence between them, meaning that they do not influence each other at all.
 
-### Policy Multiplex, Within-layer Model
+### Policy Multiplex, Cross-layer Model
 Now, let us fit a model that includes cross-layer dependence terms. Specifically, let us include, using `duplexdyad`, a term for cross-layer reinforcement and a term for cross-layer reciprocity. From the code below, we see that the `duplexdyad` term takes an argument `layers = list(1, 2)`. It means that the two layers included in the dependence term are layers 1 and 2. This format is common to cross-layer dependence terms in the `multilayer.ergm` package.
 
 ```{r, message=FALSE}
@@ -133,3 +130,5 @@ And the output:
 ```{r}
 summary(mod.cross)
 ```
+
+The `duplexdyad.e` term in the output is the cross-layer reciprocity effect and the `duplexdyad.f` term is the cross-layer reinforcement effect. (For more detail on the different configurations in the duplex dyad census, see Fig. 4 of [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).) As these results show, an actor's tendency to communicate scientific information to another actor is reinforced by whether they think that other actor is influential and vice versa.
