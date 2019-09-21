@@ -3,6 +3,11 @@
 multilayer.ergm: Exponential Random Graph Models for Multilayer Networks
 ========================================================================
 
+Updates
+-------
+
+Version 0.1.6 has been released. This version ensures reproduction of the results in the package's companion paper published in *Political Science Research and Method*.
+
 About
 -----
 
