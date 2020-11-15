@@ -15,6 +15,10 @@ knitr::opts_chunk$set(
 # multilayer.ergm: Exponential Random Graph Models for Multilayer Networks
 
 ## Updates
+Version 0.3.0 will be updated soon. It will include new terms such as intra-layer gwidegree and intra-layer gwodegree.
+
+Version 0.2.0 has been released. This version updates the interface with the statenet suite.
+
 Version 0.1.6 has been released. This version ensures reproduction of the results in the package's companion paper published in _Political Science Research and Method_.
 
 ## About 
