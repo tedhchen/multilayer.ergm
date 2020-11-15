@@ -4,8 +4,12 @@
 \alias{to.multiplex}
 \title{To Multiplex}
 \usage{
-to.multiplex(..., output = c("matrix", "network"), directed = TRUE,
-  offzeros = FALSE)
+to.multiplex(
+  ...,
+  output = c("matrix", "network"),
+  directed = TRUE,
+  offzeros = FALSE
+)
 }
 \arguments{
 \item{...}{matrices or \code{network} objects, or a list of matrices or \code{network} objects.}

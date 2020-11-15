@@ -4,7 +4,9 @@
 \name{intoverlap}
 \alias{intoverlap}
 \title{Network of Overlapping Membership in the International System (1989-1995)}
-\format{A matrix with 189 columns and 189 rows.}
+\format{
+A matrix with 189 columns and 189 rows.
+}
 \source{
 Correlates of War website: \url{http://www.correlatesofwar.org/data-sets/state-system-membership}
 }

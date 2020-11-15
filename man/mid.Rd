@@ -4,7 +4,9 @@
 \name{mid}
 \alias{mid}
 \title{Dyadic Militarized Interstate Dispute (MID) Network}
-\format{A matrix with 189 columns and 189 rows.}
+\format{
+A matrix with 189 columns and 189 rows.
+}
 \source{
 Zeev Maoz's website with the original data: \url{http://vanity.dss.ucdavis.edu/~maoz/dyadmid.html}
 }

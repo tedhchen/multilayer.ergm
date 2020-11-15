@@ -4,7 +4,9 @@
 \name{intraconf}
 \alias{intraconf}
 \title{Intrastate Conflict Network}
-\format{A matrix with 544 columns and 189 rows.}
+\format{
+A matrix with 544 columns and 189 rows.
+}
 \source{
 UCDP website: \url{https://ucdp.uu.se/downloads/}
 }

@@ -6,10 +6,10 @@
 ## Updates
 
 Version 0.3.0 will be updated soon. It will include new terms such as
-intra-layer gwidegree and intra-layer gwodegree.
+intra-layer `gwidegree` and intra-layer `gwodegree`.
 
 Version 0.2.0 has been released. This version updates the interface with
-the statenet suite.
+the `statenet` packages.
 
 Version 0.1.6 has been released. This version ensures reproduction of
 the results in the package’s companion paper published in *Political
@@ -21,7 +21,7 @@ This package extends the exponential random graph model (ERGM) to
 multilayer networks. For more information on the application of ERGMs to
 multilayer networks, see [Chen, 2019, “Statistical Inference for
 Multilayer Networks in Political
-Science”](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).
+Science”](https://doi.org/10.1017/psrm.2019.49).
 
 ## Installation
 

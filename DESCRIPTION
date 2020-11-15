@@ -15,7 +15,8 @@ Author: Ted Hsuan Yun Chen [aut, cre]
 Maintainer: Ted Hsuan Yun Chen <ted.hsuanyun.chen@gmail.com>
 NeedsCompilation: yes
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
+Encoding: UTF-8
