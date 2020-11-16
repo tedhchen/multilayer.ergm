@@ -64,8 +64,8 @@ This set of network terms are used to compute network statistics over a single t
     This term adds one network statistic for each element in \code{attrname}, which are quantitative node attributes, equal to the edgewise sum of the attribute over all edges on the network layer specified by \code{layer}. See \code{?nodecov} for the monoplex version.
     }
     
-    \item{\code{nodefactor_layer(attrname, base = 1, layer)} (directed, undirected)}{\emph{Categorical nodal attribute, within layer:}
-    This terms adds one or more network statistics that counts the number of times a node with the combination of attributes specified by \code{attrname} appears on an edge on the network layer specified by \code{layer}. By default (i.e. when \code{base = 1}), all combinations of specified attributes are counted with the exception of the first category. More specifically, \code{base} specifies the levels of attribute combinations to omit. \code{summary(nw~nodefactor_layer(...))} is an easy way to see the order of all attribute combinations.
+    \item{\code{nodefactor_layer(attr, levels = -1, layer)} (directed, undirected)}{\emph{Categorical nodal attribute, within layer:}
+    This terms adds one or more network statistics that counts the number of times a node with the combination of attributes specified by \code{attrname} appears on an edge on the network layer specified by \code{layer}. By default (i.e. when \code{levels = -1}), all combinations of specified attributes are counted with the exception of the first level. More specifically, \code{levels} specifies the levels of attribute combinations to keep (or omit, when \code{-} is added). \code{levels = NULL}/\code{TRUE} keeps all levels. \code{summary(nw~nodefactor_layer(...))} is an easy way to see the order of all attribute combinations.
     }
     
     \item{\code{nodeifactor_layer(attrname, base = 1, layer)} (directed)}{\emph{Categorical receiver attribute, within layer:}

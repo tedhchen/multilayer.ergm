@@ -126,25 +126,24 @@ InitErgmTerm.degree_layer<-function(nw, arglist, ...) {
 InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, 
-                      varnames = c("attrname", "base", "layer"),
-                      vartypes = c("character", "numeric", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL),
+                      varnames = c("attr", "levels", "layer"),
+                      vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
+  attrarg <- a$attr
+  levels <- a$levels
   
-  nodecov <-
-    if(length(a$attrname)==1)
-      get.node.attr(nw, a$attrname)
-  else{
-    do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
-  }
+  nodecov <- ergm_get_vattr(attrarg, nw)
+  attrname <- attr(nodecov, "name")
   
-  u <- sort(unique(nodecov))
+  u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+  
   if (any(NVL(a$base,0)!=0)) {
     u <- u[-a$base]
-    if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
-      return()
-    }
+  }
+  if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
+    return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
@@ -159,13 +158,13 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   list(name="nodefactor_layer", #required
        coef.names = paste("nodefactor_layer", 
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
-                          paste(a$attrname,collapse="."), u, sep="."), #required
+                          paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
        dependence = FALSE, # So we don't use MCMC if not necessary
        minval = 0,
        pkgname = "multilayer.ergm"
   )
-}  
+}
 
 # 1.3) Nodeifactor within layer
 InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
