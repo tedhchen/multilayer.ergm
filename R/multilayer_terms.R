@@ -7,7 +7,7 @@
 InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, 
-                      varnames = c("x", "attrname", "layer"),
+                      varnames = c("x", "attr", "layer"),
                       vartypes = c("matrix,network,character", "character", "numeric"),
                       defaultvalues = list(NULL, NULL, NULL),
                       required = c(TRUE, FALSE, TRUE))
@@ -28,7 +28,7 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
       }
     } else {
       if(is.network(a$x)){
-        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attrname)
+        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attr)
       } else {
         xm<-as.matrix(a$x)
       }
@@ -52,7 +52,7 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
       }
     } else {
       if(is.network(a$x)){
-        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attrname)
+        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attr)
       } else {
         xm<-as.matrix(a$x)
       }
@@ -69,11 +69,11 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   }
   
   ### Construct the list to return
-  if(!is.null(a$attrname)) {
+  if(!is.null(a$attr)) {
     # Note: the sys.call business grabs the name of the x object from the 
     # user's call.  Not elegant, but it works as long as the user doesn't
     # pass anything complicated.
-    cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(a$attrname), sep = ".")
+    cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(a$attr), sep = ".")
   } else {
     cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(sys.call(0)[[3]][2]), sep = ".")
   }

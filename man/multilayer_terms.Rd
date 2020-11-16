@@ -40,8 +40,8 @@ This set of network terms are used to compute network statistics over a single t
     This term adds one network statistic for each element in \code{d}, which are numeric values, equal to the number of nodes on the network layer specified by \code{layer} with \code{d[i]} intralayer edges (i.e. those on the same layer). When \code{d = 0}, this term is a count of isolates on the specified layer.
     }
     
-    \item{\code{edgecov_layer(x, attrname, layer)} (directed, undirected)}{\emph{Edge covariate, within layer:}
-    This term adds one network statistic equal to the sum of the covariate values for each edge that appears on the network layer specified by \code{layer}. The covariate is specified using the \code{x} argument, as a \code{matrix} or \code{network} object with the same size as the network layer. If \code{x} is a \code{network} object, argument \code{attrname} can be used to specify an edge attribute from the network. If the \code{x} argument is specified as \code{"edges"}, the \code{edges_layer} term is returned for the specified network layer.
+    \item{\code{edgecov_layer(x, attr = NULL, layer)} (directed, undirected)}{\emph{Edge covariate, within layer:}
+    This term adds one network statistic equal to the sum of the covariate values for each edge that appears on the network layer specified by \code{layer}. The covariate is specified using the \code{x} argument, as a \code{matrix} or \code{network} object with the same size as the network layer. If \code{x} is a \code{network} object, argument \code{attr} can be used to specify an edge attribute from the network. If the \code{x} argument is specified as \code{"edges"}, the \code{edges_layer} term is returned for the specified network layer.
     }
     
     \item{\code{edges_layer(layer)} (directed, undirected)}{\emph{Edges, within layer:}
@@ -56,7 +56,7 @@ This set of network terms are used to compute network statistics over a single t
     This term adds one network statistic equal to the geometrically-weighted edgewise shared partner distribution on the network layer specified by \code{layer}, with decay parameter specified by \code{decay}. For directed networks, only partners on a directed two path in the same direction of the edge are counted.
     }
     
-    \item{\code{kstar_layer(k, attr, levels = NULL, layer)} (undirected)}{\emph{k-star, within layer:}
+    \item{\code{kstar_layer(k, attr = NULL, levels = NULL, layer)} (undirected)}{\emph{k-star, within layer:}
     This term adds one network statistic for each element in \code{k}, which are numeric values, equal to the number of \code{k[i]}-stars on the network layer specified by \code{layer}. If \code{attr} is specified, the count of within layer \emph{k}-stars includes only those with the same specified nodal attribute. See \code{?kstar} for the monoplex version.
     }
     
