@@ -128,7 +128,7 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   a <- check.ErgmTerm(nw, arglist, 
                       varnames = c("attr", "levels", "layer"),
                       vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
-                      defaultvalues = list(NULL, LEVELS_BASE1, NULL),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
   attrarg <- a$attr
@@ -169,7 +169,7 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
   a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
                       varnames = c("attr", "levels", "layer"),
                       vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
-                      defaultvalues = list(NULL, LEVELS_BASE1, NULL),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
   attrarg <- a$attr
@@ -210,7 +210,7 @@ InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
   a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
                       varnames = c("attr", "levels", "layer"),
                       vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
-                      defaultvalues = list(NULL, LEVELS_BASE1, NULL),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
   attrarg <- a$attr
