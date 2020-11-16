@@ -4,7 +4,9 @@
 \name{types}
 \alias{types}
 \title{ChemG Actor Types}
-\format{A character vector of length 30.}
+\format{
+A character vector of length 30.
+}
 \source{
 Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 }

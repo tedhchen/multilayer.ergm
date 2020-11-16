@@ -4,7 +4,9 @@
 \name{nsconf}
 \alias{nsconf}
 \title{Nonstate Conflict Network}
-\format{A matrix with 544 columns and 544 rows.}
+\format{
+A matrix with 544 columns and 544 rows.
+}
 \source{
 UCDP website: \url{https://ucdp.uu.se/downloads/}
 }

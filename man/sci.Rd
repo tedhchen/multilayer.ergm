@@ -4,7 +4,9 @@
 \name{sci}
 \alias{sci}
 \title{ChemG Scientific Information Network}
-\format{A matrix with 30 columns and 30 rows.}
+\format{
+A matrix with 30 columns and 30 rows.
+}
 \source{
 Dataverse: \url{http://hdl.handle.net/1902.1/17004}
 }

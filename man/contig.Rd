@@ -4,7 +4,9 @@
 \name{contig}
 \alias{contig}
 \title{Physical Contiguity Network}
-\format{A matrix with 189 columns and 189 rows.}
+\format{
+A matrix with 189 columns and 189 rows.
+}
 \source{
 Gleditsch's website: \url{http://ksgleditsch.com/publ.html}
 }

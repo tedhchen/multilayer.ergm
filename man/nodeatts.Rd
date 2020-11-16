@@ -4,7 +4,8 @@
 \name{nodeatts}
 \alias{nodeatts}
 \title{Global Conflict Actor Attributes}
-\format{A data frame with 733 rows and 7 columns:
+\format{
+A data frame with 733 rows and 7 columns:
 \describe{
 \item{name}{The actor's name.}
 \item{interstate}{An indicator for whether the actor is engaged in interstate conflict. Nonstate actors by definition cannot be engaged in interstate conflict.}
@@ -13,7 +14,8 @@
 \item{dem}{An indicator for whether the actor is a democracy. All nonstate actors are coded as nondemocracies.}
 \item{cinc}{The actor's Composite Index of National Capability (CINC) score. All nonstate actors are coded to have a CINC score of zero.}
 \item{trans}{An indicator for whether the actor is a transitional regime. All nonstate actors are coded to not be transitional regimes.}
-}}
+}
+}
 \source{
 Gleditsch's website: \url{http://ksgleditsch.com/publ.html}
 

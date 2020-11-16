@@ -7,7 +7,7 @@
 InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, 
-                      varnames = c("x", "attrname", "layer"),
+                      varnames = c("x", "attr", "layer"),
                       vartypes = c("matrix,network,character", "character", "numeric"),
                       defaultvalues = list(NULL, NULL, NULL),
                       required = c(TRUE, FALSE, TRUE))
@@ -28,7 +28,7 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
       }
     } else {
       if(is.network(a$x)){
-        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attrname)
+        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attr)
       } else {
         xm<-as.matrix(a$x)
       }
@@ -52,7 +52,7 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
       }
     } else {
       if(is.network(a$x)){
-        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attrname)
+        xm<-as.matrix.network(a$x,matrix.type="adjacency",a$attr)
       } else {
         xm<-as.matrix(a$x)
       }
@@ -69,11 +69,11 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   }
   
   ### Construct the list to return
-  if(!is.null(a$attrname)) {
+  if(!is.null(a$attr)) {
     # Note: the sys.call business grabs the name of the x object from the 
     # user's call.  Not elegant, but it works as long as the user doesn't
     # pass anything complicated.
-    cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(a$attrname), sep = ".")
+    cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(a$attr), sep = ".")
   } else {
     cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(sys.call(0)[[3]][2]), sep = ".")
   }
@@ -126,25 +126,21 @@ InitErgmTerm.degree_layer<-function(nw, arglist, ...) {
 InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, 
-                      varnames = c("attrname", "base", "layer"),
-                      vartypes = c("character", "numeric", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL),
+                      varnames = c("attr", "levels", "layer"),
+                      vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
+  attrarg <- a$attr
+  levels <- a$levels
   
-  nodecov <-
-    if(length(a$attrname)==1)
-      get.node.attr(nw, a$attrname)
-  else{
-    do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
-  }
+  nodecov <- ergm_get_vattr(attrarg, nw)
+  attrname <- attr(nodecov, "name")
   
-  u <- sort(unique(nodecov))
-  if (any(NVL(a$base,0)!=0)) {
-    u <- u[-a$base]
-    if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
-      return()
-    }
+  u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+  
+  if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
+    return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
@@ -159,37 +155,33 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   list(name="nodefactor_layer", #required
        coef.names = paste("nodefactor_layer", 
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
-                          paste(a$attrname,collapse="."), u, sep="."), #required
+                          paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
        dependence = FALSE, # So we don't use MCMC if not necessary
        minval = 0,
        pkgname = "multilayer.ergm"
   )
-}  
+}
 
 # 1.3) Nodeifactor within layer
 InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
-                      varnames = c("attrname", "base", "layer"),
-                      vartypes = c("character", "numeric", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL),
+                      varnames = c("attr", "levels", "layer"),
+                      vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
+  attrarg <- a$attr
+  levels <- a$levels
   
-  nodecov <-
-    if(length(a$attrname)==1)
-      get.node.attr(nw, a$attrname)
-  else{
-    do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
-  }
+  nodecov <- ergm_get_vattr(attrarg, nw)
+  attrname <- attr(nodecov, "name")
   
-  u <- sort(unique(nodecov))
-  if (any(NVL(a$base,0)!=0)) {
-    u <- u[-a$base]
-    if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
-      return()
-    }
+  u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+  
+  if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
+    return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
@@ -204,7 +196,7 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
   list(name="nodeifactor_layer", #required
        coef.names = paste("nodeifactor_layer", 
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
-                          paste(a$attrname,collapse="."), u, sep="."), #required
+                          paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
        dependence = FALSE, # So we don't use MCMC if not necessary
        minval = 0,
@@ -216,24 +208,21 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
 InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
   a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
-                      varnames = c("attrname", "base", "layer"),
-                      vartypes = c("character", "numeric", "numeric"),
-                      defaultvalues = list(NULL, 1, NULL),
+                      varnames = c("attr", "levels", "layer"),
+                      vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
+                      defaultvalues = list(NULL, -1, NULL),
                       required = c(TRUE, FALSE, TRUE))
   ### Process the arguments
-  nodecov <-
-    if(length(a$attrname)==1)
-      get.node.attr(nw, a$attrname)
-  else{
-    do.call(paste,c(sapply(a$attrname,function(oneattr) get.node.attr(nw,oneattr),simplify=FALSE),sep="."))
-  }
+  attrarg <- a$attr
+  levels <- a$levels
   
-  u <- sort(unique(nodecov))
-  if (any(NVL(a$base,0)!=0)) {
-    u <- u[-a$base]
-    if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
-      return()
-    }
+  nodecov <- ergm_get_vattr(attrarg, nw)
+  attrname <- attr(nodecov, "name")
+  
+  u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+  
+  if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
+    return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
@@ -248,7 +237,7 @@ InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
   list(name="nodeofactor_layer",  #required
        coef.names = paste("nodeofactor_layer", 
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
-                          paste(a$attrname,collapse="."), u, sep="."), #required
+                          paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
        dependence = FALSE, # So we don't use MCMC if not necessary
        minval = 0,
@@ -282,8 +271,8 @@ InitErgmTerm.nodecov_layer<-function (nw, arglist, ...) {
 # k-star within layer
 InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
   a <- check.ErgmTerm(nw, arglist, directed = FALSE,
-                      varnames = c("k", "attrname", "levels", "layer"),
-                      vartypes = c("numeric", "character", "character,numeric,logical", "numeric"),
+                      varnames = c("k", "attr", "levels", "layer"),
+                      vartypes = c("numeric", ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC,"numeric"),
                       defaultvalues = list(NULL, NULL, NULL, NULL),
                       required = c(TRUE, FALSE, FALSE, TRUE))
   # Layers
@@ -291,18 +280,22 @@ InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
   
-  k<-a$k; attrname<-a$attrname
-  if(!is.null(attrname)) {
-    nodecov <- get.node.attr(nw, attrname, "kstar")
-    u <- NVL(a$levels, sort(unique(nodecov)))
-    if(any(is.na(nodecov))){u<-c(u,NA)}
+  attrarg <- a$attr
+  levels <- a$levels
+  k <- a$k
+  
+  if(!is.null(attrarg)) {
+    nodecov <- ergm_get_vattr(attrarg, nw)
+    attrname <- attr(nodecov, "name")
+    u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
     #    Recode to numeric if necessary
     nodecov <- match(nodecov,u,nomatch=length(u)+1)
-    if (length(u)==1)
-      stop ("Attribute given to kstar() has only one value", call.=FALSE)
   }
   
-  if(!is.null(attrname)){
+  lk<-length(k)
+  if(lk==0){return(NULL)}
+  
+  if(!is.null(attrarg)){
     coef.names <- paste(k, "-star_layer.", 
                         ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]), 
                         ".", attrname, sep="")
@@ -313,7 +306,7 @@ InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
                         sep="")
     inputs <- c(k)
   }
-  
+
   list(name="kstar_layer", coef.names=coef.names, 
        inputs=c(inputs, layer, layer.mem), 
        minval = 0, conflicts.constraints="degreedist")
