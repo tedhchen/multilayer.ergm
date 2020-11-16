@@ -56,8 +56,8 @@ This set of network terms are used to compute network statistics over a single t
     This term adds one network statistic equal to the geometrically-weighted edgewise shared partner distribution on the network layer specified by \code{layer}, with decay parameter specified by \code{decay}. For directed networks, only partners on a directed two path in the same direction of the edge are counted.
     }
     
-    \item{\code{kstar_layer(k, attrname, levels, layer)} (undirected)}{\emph{k-star, within layer:}
-    This term adds one network statistic for each element in \code{k}, which are numeric values, equal to the number of \code{k[i]}-stars on the network layer specified by \code{layer}. If \code{attrname} is specified, the count of within layer \emph{k}-stars includes only those with the same specified nodal attribute. See \code{?kstar} for the monoplex version.
+    \item{\code{kstar_layer(k, attr, levels = NULL, layer)} (undirected)}{\emph{k-star, within layer:}
+    This term adds one network statistic for each element in \code{k}, which are numeric values, equal to the number of \code{k[i]}-stars on the network layer specified by \code{layer}. If \code{attr} is specified, the count of within layer \emph{k}-stars includes only those with the same specified nodal attribute. See \code{?kstar} for the monoplex version.
     }
     
     \item{\code{nodecov_layer(attrname, layer)} (directed, undirected)}{\emph{Quantitative nodal attribute, within layer:}

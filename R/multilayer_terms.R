@@ -282,8 +282,8 @@ InitErgmTerm.nodecov_layer<-function (nw, arglist, ...) {
 # k-star within layer
 InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
   a <- check.ErgmTerm(nw, arglist, directed = FALSE,
-                      varnames = c("k", "attrname", "levels", "layer"),
-                      vartypes = c("numeric", "character", "character,numeric,logical", "numeric"),
+                      varnames = c("k", "attr", "levels", "layer"),
+                      vartypes = c("numeric", ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC,"numeric"),
                       defaultvalues = list(NULL, NULL, NULL, NULL),
                       required = c(TRUE, FALSE, FALSE, TRUE))
   # Layers
@@ -291,18 +291,22 @@ InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
   
-  k<-a$k; attrname<-a$attrname
-  if(!is.null(attrname)) {
-    nodecov <- get.node.attr(nw, attrname, "kstar")
-    u <- NVL(a$levels, sort(unique(nodecov)))
-    if(any(is.na(nodecov))){u<-c(u,NA)}
+  attrarg <- a$attr
+  levels <- a$levels
+  k <- a$k
+  
+  if(!is.null(attrarg)) {
+    nodecov <- ergm_get_vattr(attrarg, nw)
+    attrname <- attr(nodecov, "name")
+    u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
     #    Recode to numeric if necessary
     nodecov <- match(nodecov,u,nomatch=length(u)+1)
-    if (length(u)==1)
-      stop ("Attribute given to kstar() has only one value", call.=FALSE)
   }
   
-  if(!is.null(attrname)){
+  lk<-length(k)
+  if(lk==0){return(NULL)}
+  
+  if(!is.null(attrarg)){
     coef.names <- paste(k, "-star_layer.", 
                         ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]), 
                         ".", attrname, sep="")
@@ -313,7 +317,7 @@ InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
                         sep="")
     inputs <- c(k)
   }
-  
+
   list(name="kstar_layer", coef.names=coef.names, 
        inputs=c(inputs, layer, layer.mem), 
        minval = 0, conflicts.constraints="degreedist")
