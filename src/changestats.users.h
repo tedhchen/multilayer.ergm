@@ -11,6 +11,7 @@
 /* Add your function names here */
 
 CHANGESTAT_FN(d_duplexdyad);
+CHANGESTAT_FN(d_duplexdyad_attr);
 CHANGESTAT_FN(d_gwdsp_layer);
 CHANGESTAT_FN(d_gwtdsp_layer);
 CHANGESTAT_FN(d_gwesp_layer);
