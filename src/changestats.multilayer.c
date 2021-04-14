@@ -138,8 +138,8 @@ D_CHANGESTAT_FN(d_duplexdyad_combo){
 	}
 	for(i = 0; i < N_NODES; i++){
 		layer_mem[i] = INPUT_PARAM[2 + N_CHANGE_STATS + i];
-		attr_send[i] = INPUT_PARAMS[N_INPUT_PARAMS - N_NODES - N_NODES + i];
-		attr_receive[i] = INPUT_PARAMS[N_INPUT_PARAMS - N_NODES + i];
+		attr_send[i] = INPUT_PARAM[N_INPUT_PARAMS - N_NODES - N_NODES + i];
+		attr_receive[i] = INPUT_PARAM[N_INPUT_PARAMS - N_NODES + i];
 	}
 	
 	ZERO_ALL_CHANGESTATS(i);
@@ -273,7 +273,7 @@ D_CHANGESTAT_FN(d_duplexdyad_send){
 	}
 	for(i = 0; i < N_NODES; i++){
 		layer_mem[i] = INPUT_PARAM[2 + N_CHANGE_STATS + i];
-		attr_send[i] = INPUT_PARAMS[N_INPUT_PARAMS - N_NODES + i];
+		attr_send[i] = INPUT_PARAM[N_INPUT_PARAMS - N_NODES + i];
 	}
 	
 	ZERO_ALL_CHANGESTATS(i);
@@ -405,7 +405,7 @@ D_CHANGESTAT_FN(d_duplexdyad_receive){
 	}
 	for(i = 0; i < N_NODES; i++){
 		layer_mem[i] = INPUT_PARAM[2 + N_CHANGE_STATS + i];
-		attr_receive[i] = INPUT_PARAMS[N_INPUT_PARAMS - N_NODES + i];
+		attr_receive[i] = INPUT_PARAM[N_INPUT_PARAMS - N_NODES + i];
 	}
 	
 	ZERO_ALL_CHANGESTATS(i);
