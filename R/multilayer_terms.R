@@ -423,11 +423,11 @@ InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
 
     if(!is.na(levels_s)){
       us <- ergm_attr_levels(levels_s, nodecov, nw, levels = sort(unique(nodecov)))
-      nodecov_s <- match(nodecov,us,nomatch=0)-1
+      nodecov_s <- match(nodecov,us, nomatch=0)-1
     }
     if(!is.na(levels_r)){
       ur <- ergm_attr_levels(levels_r, nodecov, nw, levels = sort(unique(nodecov)))
-      nodecov_r <- match(nodecov,urnomatch=0)-1
+      nodecov_r <- match(nodecov,ur, nomatch=0)-1
     }
     inputs <- c(inputs, nodecov_s, nodecov_r)
 
