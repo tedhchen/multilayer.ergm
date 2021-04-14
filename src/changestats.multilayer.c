@@ -122,7 +122,7 @@ D_CHANGESTAT_FN(d_duplexdyad){
 	UNDO_PREVIOUS_TOGGLES(i);
 }
 
-D_CHANGESTAT_FN(d_duplexdyad_attr){
+D_CHANGESTAT_FN(d_duplexdyad_combo){
 	/* Declaring variables */
 	int i, j, la, lb, type[N_CHANGE_STATS], layer_mem[N_NODES], attr[N_NODES]; 
 	int changes[5], edge_status[4];

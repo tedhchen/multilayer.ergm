@@ -6,7 +6,7 @@
 # 1.1) Edgecov within layer.
 InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
-  a <- check.ErgmTerm(nw, arglist, 
+  a <- check.ErgmTerm(nw, arglist,
                       varnames = c("x", "attr", "layer"),
                       vartypes = c("matrix,network,character", "character", "numeric"),
                       defaultvalues = list(NULL, NULL, NULL),
@@ -14,12 +14,12 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
   ### Process the arguments
   layer.mem <- get.node.attr(nw, "layer.mem")
   layer <- sort(a$layer)
-  
+
   if(length(layer) > 2){stop("Cannot name more than two layers.", call.=FALSE)}
   if(length(layer) == 1){
     in.layer <- which(layer.mem == layer)
     layer.size <- length(in.layer)
-    
+
     if(is.character(a$x)){
       if(a$x == "edges"){
         xm <- matrix(1, ncol = layer.size, nrow = layer.size)
@@ -33,17 +33,17 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
         xm<-as.matrix(a$x)
       }
     }
-    
-    # To multilayer 
+
+    # To multilayer
     xm.l <- matrix(0, ncol = network.size(nw), nrow = network.size(nw))
     xm.l[in.layer,in.layer] <- xm
-    
+
   } else {
     in.layer1 <- which(layer.mem == layer[1])
     in.layer2 <- which(layer.mem == layer[2])
     layer.size1 <- length(in.layer1)
     layer.size2 <- length(in.layer2)
-    
+
     if(is.character(a$x)){
       if(a$x == "edges"){
         xm <- matrix(1, nrow = layer.size1, ncol = layer.size2)
@@ -60,17 +60,17 @@ InitErgmTerm.edgecov_layer <- function(nw, arglist, ...) {
     if(nrow(xm) != layer.size1 | ncol(xm) != layer.size2){
       stop("Dimensions of specified layer and supplied network or matrix do not match.",call.=FALSE)
     }
-    # To multilayer 
+    # To multilayer
     xm.l <- matrix(0, ncol = network.size(nw), nrow = network.size(nw))
     xm.l[in.layer1,in.layer2] <- xm
-    
+
     # Filling bottom diagonal
     xm.l <- uptolo(xm.l)
   }
-  
+
   ### Construct the list to return
   if(!is.null(a$attr)) {
-    # Note: the sys.call business grabs the name of the x object from the 
+    # Note: the sys.call business grabs the name of the x object from the
     # user's call.  Not elegant, but it works as long as the user doesn't
     # pass anything complicated.
     cn<-paste("edgecov.layer", paste(layer, collapse = "-"), as.character(a$attr), sep = ".")
@@ -107,16 +107,16 @@ InitErgmTerm.degree_layer<-function(nw, arglist, ...) {
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, layer)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   d<-a$d
   if (any(d==0)) {
     emptynwstats <- rep(0, length(d))
     emptynwstats[d==0] <- ifelse(layer[1] == layer[2], sum(layer.mem == layer[1]), network.size(nw))
   } else {emptynwstats <- rep(0, length(d))}
-  
+
   list(name = "degree_layer",
-       coef.names = paste("deg", d, "_layer.", 
-                          ifelse(layer[1] != layer[2], paste(layer, collapse = "-"), layer[1]), 
+       coef.names = paste("deg", d, "_layer.",
+                          ifelse(layer[1] != layer[2], paste(layer, collapse = "-"), layer[1]),
                           sep=""),
        inputs = c(d, layer, layer.mem),
        emptynwstats=emptynwstats, dependence=TRUE, minval = 0)
@@ -125,7 +125,7 @@ InitErgmTerm.degree_layer<-function(nw, arglist, ...) {
 # 1.2) Nodefactor within layer
 InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
-  a <- check.ErgmTerm(nw, arglist, 
+  a <- check.ErgmTerm(nw, arglist,
                       varnames = c("attr", "levels", "layer"),
                       vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
                       defaultvalues = list(NULL, -1, NULL),
@@ -133,27 +133,27 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
   ### Process the arguments
   attrarg <- a$attr
   levels <- a$levels
-  
+
   nodecov <- ergm_get_vattr(attrarg, nw)
   attrname <- attr(nodecov, "name")
-  
+
   u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
-  
+
   if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
     return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
-  
+
   # Layers
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   ### Construct the list to return
   inputs <- nodepos
   list(name="nodefactor_layer", #required
-       coef.names = paste("nodefactor_layer", 
+       coef.names = paste("nodefactor_layer",
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
                           paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
@@ -166,7 +166,7 @@ InitErgmTerm.nodefactor_layer<-function (nw, arglist, ...) {
 # 1.3) Nodeifactor within layer
 InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
-  a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
+  a <- check.ErgmTerm(nw, arglist, directed=TRUE,
                       varnames = c("attr", "levels", "layer"),
                       vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
                       defaultvalues = list(NULL, -1, NULL),
@@ -174,27 +174,27 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
   ### Process the arguments
   attrarg <- a$attr
   levels <- a$levels
-  
+
   nodecov <- ergm_get_vattr(attrarg, nw)
   attrname <- attr(nodecov, "name")
-  
+
   u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
-  
+
   if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
     return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
-  
+
   # Layers
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   ### Construct the list to return
   inputs <- nodepos
   list(name="nodeifactor_layer", #required
-       coef.names = paste("nodeifactor_layer", 
+       coef.names = paste("nodeifactor_layer",
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
                           paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
@@ -207,7 +207,7 @@ InitErgmTerm.nodeifactor_layer<-function (nw, arglist, ...) {
 # 1.4) Nodeofactor within layer
 InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
   ### Check the network and arguments to make sure they are appropriate.
-  a <- check.ErgmTerm(nw, arglist, directed=TRUE, 
+  a <- check.ErgmTerm(nw, arglist, directed=TRUE,
                       varnames = c("attr", "levels", "layer"),
                       vartypes = c(ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, "numeric"),
                       defaultvalues = list(NULL, -1, NULL),
@@ -215,27 +215,27 @@ InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
   ### Process the arguments
   attrarg <- a$attr
   levels <- a$levels
-  
+
   nodecov <- ergm_get_vattr(attrarg, nw)
   attrname <- attr(nodecov, "name")
-  
+
   u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
-  
+
   if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
     return()
   }
   #   Recode to numeric
   nodepos <- match(nodecov,u,nomatch=0)-1
-  
+
   # Layers
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   ### Construct the list to return
   inputs <- nodepos
   list(name="nodeofactor_layer",  #required
-       coef.names = paste("nodeofactor_layer", 
+       coef.names = paste("nodeofactor_layer",
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
                           paste(attrname,collapse="."), u, sep="."), #required
        inputs = c(inputs, layer, layer.mem),
@@ -243,7 +243,7 @@ InitErgmTerm.nodeofactor_layer<-function (nw, arglist, ...) {
        minval = 0,
        pkgname = "multilayer.ergm"
   )
-}  
+}
 
 # 1.5) Nodecov within layer
 InitErgmTerm.nodecov_layer<-function (nw, arglist, ...) {
@@ -252,16 +252,16 @@ InitErgmTerm.nodecov_layer<-function (nw, arglist, ...) {
                       vartypes = c("character", "function", "character", "numeric"),
                       defaultvalues = list(NULL,function(x)x,"",NULL),
                       required = c(TRUE, FALSE, FALSE, TRUE))
-  
+
   # Layers
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   attrname<-a$attrname
   f<-a$transform
   f.name<-a$transformname
-  coef.names <- paste(paste("nodecov_layer.", 
+  coef.names <- paste(paste("nodecov_layer.",
                             ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
                             ifelse(f.name == "", "","."), f.name, sep=""),attrname,sep=".")
   nodecov <- f(get.node.attr(nw, attrname, "nodecov", numeric=TRUE))
@@ -279,11 +279,11 @@ InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   attrarg <- a$attr
   levels <- a$levels
   k <- a$k
-  
+
   if(!is.null(attrarg)) {
     nodecov <- ergm_get_vattr(attrarg, nw)
     attrname <- attr(nodecov, "name")
@@ -291,24 +291,24 @@ InitErgmTerm.kstar_layer<-function(nw, arglist, ...) {
     #    Recode to numeric if necessary
     nodecov <- match(nodecov,u,nomatch=length(u)+1)
   }
-  
+
   lk<-length(k)
   if(lk==0){return(NULL)}
-  
+
   if(!is.null(attrarg)){
-    coef.names <- paste(k, "-star_layer.", 
-                        ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]), 
+    coef.names <- paste(k, "-star_layer.",
+                        ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
                         ".", attrname, sep="")
     inputs <- c(k, nodecov)
   }else{
-    coef.names <- paste(k, "-star_layer.", 
-                        ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]), 
+    coef.names <- paste(k, "-star_layer.",
+                        ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
                         sep="")
     inputs <- c(k)
   }
 
-  list(name="kstar_layer", coef.names=coef.names, 
-       inputs=c(inputs, layer, layer.mem), 
+  list(name="kstar_layer", coef.names=coef.names,
+       inputs=c(inputs, layer, layer.mem),
        minval = 0, conflicts.constraints="degreedist")
 }
 
@@ -320,38 +320,38 @@ InitErgmTerm.altkstar.fixed_layer <- function(nw, arglist, ...){
                       defaultvalues = list(2, NULL),
                       required = c(FALSE, TRUE))
   lambda <- a$lambda
-  
+
   # Layers
   layer <- a$layer
   if(length(layer) == 1){layer <- c(layer, 0)}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
-  list(name="altkstar_fixed_layer", 
-       coef.names = paste("altkstar(", lambda, ")_layer.", 
+
+  list(name="altkstar_fixed_layer",
+       coef.names = paste("altkstar(", lambda, ")_layer.",
                           ifelse(layer[2] != 0, paste(layer, collapse = "-"), layer[1]),
-                          sep=""), 
+                          sep=""),
        inputs=c(lambda, layer, layer.mem), dependence=TRUE)
 }
 
 # 1.1) GWDSP within layer.
 InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
-  # the following line was commented out in <InitErgm.gwdsp>:  
+  # the following line was commented out in <InitErgm.gwdsp>:
   #   ergm.checkdirected("gwdsp", is.directed(nw), requirement=FALSE)
-  # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>  
+  # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>
   a <- check.ErgmTerm(nw, arglist,
                       varnames = c("decay","fixed","layer"),
                       vartypes = c("numeric","logical","numeric"),
                       defaultvalues = list(0, TRUE, NULL),
                       required = c(FALSE, FALSE, TRUE))
-  
+
   if(a$fixed != TRUE){
     stop("The current version of gwdsp_layer() only allows for fixed decay values.", call.=FALSE)
   }
-  
+
   decay<-a$decay
   layer<-a$layer
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   coef.names <- paste("gwdsp.layer.",layer,".fixed.",decay,sep="")
   if(is.directed(nw)){dname <- "gwtdsp_layer"}else{dname <- "gwdsp_layer"}
   list(name=dname, coef.names=coef.names, inputs=c(decay, layer, layer.mem), pkgname = "multilayer.ergm")
@@ -361,17 +361,17 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
 InitErgmTerm.gwesp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   # the following line was commented out in <InitErgm.gwesp>:
   #   ergm.checkdirected("gwesp", is.directed(nw), requirement=FALSE)
-  # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>  
+  # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>
   a <- check.ErgmTerm(nw, arglist,
                       varnames = c("decay","fixed","layer"),
                       vartypes = c("numeric","logical", "numeric"),
                       defaultvalues = list(0, TRUE, NULL),
                       required = c(FALSE, FALSE, TRUE))
-  
+
   if(a$fixed != TRUE){
     stop("The current version of gwesp_layer() only allows for fixed decay values.", call.=FALSE)
   }
-  
+
   decay<-a$decay
   layer<-a$layer
   layer.mem <- get.node.attr(nw, "layer.mem")
@@ -385,7 +385,7 @@ InitErgmTerm.gwesp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
 
 # 2.1) Duplex-dyad terms
 # Initializes an ergm term to count any combination of five cross-layer configurations in the duplex dyad census.
-# There are five configurations: e, f, g, h, i. 
+# There are five configurations: e, f, g, h, i.
 # (See pp 12-13 in https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835)
 
 # The resulting duplexdyad() function to be used in the ergm framework takes three arguments:
@@ -395,22 +395,52 @@ InitErgmTerm.gwesp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
 InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
   # Initial check
   a <- check.ErgmTerm(nw, arglist, directed = TRUE, bipartite = FALSE,
-                      varnames = c("type", "layers"),
-                      vartypes = c("character", "list"),
-                      defaultvalues = list(NULL, NULL),
-                      required = c(TRUE, TRUE))
-  
+                      varnames = c("type", "attr", "levels_sender", "levels_receiver", "layers"),
+                      vartypes = c("character", ERGM_VATTR_SPEC, ERGM_LEVELS_SPEC, ERGM_LEVELS_SPEC, "list"),
+                      defaultvalues = list(NULL, NULL, -1, -1, NULL),
+                      required = c(TRUE, FALSE, FALSE, FALSE, TRUE))
+
   # Error messages for misspecified arguments.
   if(length(unique(a$layers))!=2){stop("duplexdyad() requires two different layers.")}
   if(any(!a$type %in% c(LETTERS[5:9],letters[5:9]))){stop("Invalid dyad structure type supplied to duplexdyad().")}
-  
+
   # Preparing data for the C side.
   layer.mem <- get.node.attr(nw, "layer.mem")
   type <- match(tolower(a$type),letters)-4
-  list(name = "duplexdyad", 
-       coef.names = paste("duplexdyad.", a$type, sep=""),
+
+  # Working with attributes
+  attrarg <- a$attr
+  levels_s <- a$levels_sender
+  levels_r <- a$levels_receiver
+  if(!is.null(attrarg) & is.na(levels_s) & is.na(levels_r)){stop("Sender and receiver attribute levels cannot both be NA if attr is supplied to duplexdyad().")}
+
+  inputs <- NULL
+  name = "duplexdyad"
+  if(!is.null(attrarg)) {
+    nodecov_s <- nodecov_r <- NULL
+    nodecov <- ergm_get_vattr(attrarg, nw)
+    attrname <- attr(nodecov, "name")
+
+    if(!is.na(levels_s)){
+      us <- ergm_attr_levels(levels_s, nodecov, nw, levels = sort(unique(nodecov)))
+      nodecov_s <- match(nodecov,us,nomatch=length(us)+1)
+    }
+    if(!is.na(levels_r)){
+      ur <- ergm_attr_levels(levels_r, nodecov, nw, levels = sort(unique(nodecov)))
+      nodecov_r <- match(nodecov,ur,nomatch=length(ur)+1)
+    }
+    inputs <- c(inputs, nodecov_s, nodecov_r)
+
+    name = "duplexdyad_combo"
+    if(is.null(nodecov_s)){name = "duplexdyad_receive"}
+    if(is.null(nodecov_r)){name = "duplexdyad_send"}
+  }
+
+  # Sending to c.
+  list(name = name,
+       coef.names = paste(name, '.', a$type, sep=""),
        pkgname = "multilayer.ergm",
-       inputs = c(unlist(a$layers), type, layer.mem),
+       inputs = c(unlist(a$layers), type, layer.mem, inputs),
        dependence = TRUE
   )
 }
@@ -423,7 +453,7 @@ InitErgmTerm.altkstar.fixed_crosslayer <- function(nw, arglist, ...){
                       defaultvalues = list(2, NULL),
                       required = c(FALSE, TRUE))
   lambda <- a$lambda
-  
+
   # Layers
   layers <- a$layers
   if(length(layers) != 2 | identical(layers[[1]], layers[[2]])){
@@ -432,9 +462,9 @@ InitErgmTerm.altkstar.fixed_crosslayer <- function(nw, arglist, ...){
   if(length(layers[[1]]) == 1){layers[[1]] <- c(layers[[1]], layers[[1]])}
   if(length(layers[[2]]) == 1){layers[[2]] <- c(layers[[2]], layers[[2]])}
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
-  list(name="altkstar_fixed_crosslayer", 
-       coef.names = paste("altkstar(", lambda, ")_crosslayer.", 
+
+  list(name="altkstar_fixed_crosslayer",
+       coef.names = paste("altkstar(", lambda, ")_crosslayer.",
                           ifelse(layers[[1]][1] != layers[[1]][2], paste(layers[[1]], collapse = "-"), layers[[1]][1]),
                           "+",
                           ifelse(layers[[2]][1] != layers[[2]][2], paste(layers[[2]], collapse = "-"), layers[[2]][1]),
@@ -451,7 +481,7 @@ InitErgmTerm.threetrail_crosslayer <- function(nw, arglist, ...) {
                        defaultvalues = list(NULL, 0),
                        required = c(TRUE, FALSE))
   layers <- a$layers; incident <- a$incident
-  
+
   #if(length(decay) > 0){
   #  if(decay < 0){stop("The 'decay' argument, if supplied, must be greater than or equal to zero.", call.=FALSE)}
   #}
@@ -463,7 +493,7 @@ InitErgmTerm.threetrail_crosslayer <- function(nw, arglist, ...) {
     if(length(layers[[i]]) == 1){layers[[i]] <- c(layers[[i]], layers[[i]])}
   }
   layer.mem <- get.node.attr(nw, "layer.mem")
-  
+
   list(name = "threetrail_crosslayer",
        coef.names = paste("threetrail_crosslayer",ifelse(incident == 1, "_incident", ""), ".",
                           ifelse(layers[[1]][1] != layers[[1]][2], paste(layers[[1]], collapse = "-"), layers[[1]][1]),"+",
@@ -489,9 +519,9 @@ InitErgmTerm.fourcycle_crosslayer <- function(nw, arglist, ...){
   } else {
     nodecov <- NULL
   }
-  
-  list(name = "fourcycle_crosslayer", 
-       coef.names = paste("fourcycle_crosslayer.", paste0(a$layers, collapse = ""), 
+
+  list(name = "fourcycle_crosslayer",
+       coef.names = paste("fourcycle_crosslayer.", paste0(a$layers, collapse = ""),
                           ifelse(length(a$attrname) > 0, paste(".", a$attrname, sep = ""), ""), sep = ""),
        pkgname = "multilayer.ergm",
        inputs = c(unlist(a$layers), layer.mem, nodecov),
