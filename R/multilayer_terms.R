@@ -415,7 +415,7 @@ InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
   if(!is.null(attrarg) & is.na(levels_s) & is.na(levels_r)){stop("Sender and receiver attribute levels cannot both be NA if attr is supplied to duplexdyad().")}
 
   inputs <- NULL
-  name = "duplexdyad"
+  name <- "duplexdyad"
   if(!is.null(attrarg)) {
     nodecov_s <- nodecov_r <- NULL
     nodecov <- ergm_get_vattr(attrarg, nw)
@@ -423,17 +423,17 @@ InitErgmTerm.duplexdyad <- function(nw, arglist, ...) {
 
     if(!is.na(levels_s)){
       us <- ergm_attr_levels(levels_s, nodecov, nw, levels = sort(unique(nodecov)))
-      nodecov_s <- match(nodecov,us,nomatch=length(us)+1)
+      nodecov_s <- match(nodecov,us,nomatch=0)-1
     }
     if(!is.na(levels_r)){
       ur <- ergm_attr_levels(levels_r, nodecov, nw, levels = sort(unique(nodecov)))
-      nodecov_r <- match(nodecov,ur,nomatch=length(ur)+1)
+      nodecov_r <- match(nodecov,urnomatch=0)-1
     }
     inputs <- c(inputs, nodecov_s, nodecov_r)
 
-    name = "duplexdyad_combo"
-    if(is.null(nodecov_s)){name = "duplexdyad_receive"}
-    if(is.null(nodecov_r)){name = "duplexdyad_send"}
+    name <- "duplexdyad_combo"
+    if(is.null(nodecov_s)){name <- "duplexdyad_receive"}
+    if(is.null(nodecov_r)){name <- "duplexdyad_send"}
   }
 
   # Sending to c.
