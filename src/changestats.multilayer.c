@@ -222,18 +222,18 @@ D_CHANGESTAT_FN(d_duplexdyad_combo){
 							
 							/* Define the observed structure (based on everything but t->h) */
 							/* Check if the right combination of sender and receiver are present on the dyad */
-							if((attr_send[tail - 1] != 1 && attr_receive[t_neighbour - 1] != -1) || (attr_send[t_neighbour - 1] != 1 && attr_receive[tail - 1] != -1)){
+							if((attr_send[tail - 1] != -1 && attr_receive[t_neighbour - 1] != -1) || (attr_send[t_neighbour - 1] != -1 && attr_receive[tail - 1] != -1)){
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 2; changes[1] += 2; changes[2] += 2; changes[3] += 2; changes[4] += 1;} /*I*/
 							}
 							/* Check if the correct combination of sender and receiver are present for tail -> t_neighbour */
-							if(attr_send[tail - 1] != 1 && attr_receive[t_neighbour - 1] != -1){
+							if(attr_send[tail - 1] != -1 && attr_receive[t_neighbour - 1] != -1){
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
 							}
 							/* Check if the correct combination of sender and receiver are present for t_neighbour -> tail */
-							if(attr_receive[tail - 1] != 1 && attr_send[t_neighbour - 1] != -1){
+							if(attr_receive[tail - 1] != -1 && attr_send[t_neighbour - 1] != -1){
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
@@ -354,11 +354,11 @@ D_CHANGESTAT_FN(d_duplexdyad_send){
 							
 							/* Define the observed structure (based on everything but t->h) */
 							/* Check if the right combination of sender and receiver are present on the dyad */
-							if(attr_send[tail - 1] != 1 || attr_send[t_neighbour - 1] != 1){
+							if(attr_send[tail - 1] != -1 || attr_send[t_neighbour - 1] != -1){
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 2; changes[1] += 2; changes[2] += 2; changes[3] += 2; changes[4] += 1;} /*I*/
 							}
 							/* Check if the correct combination of sender and receiver are present for tail -> t_neighbour */
-							if(attr_send[tail - 1] != 1){
+							if(attr_send[tail - 1] != -1){
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
@@ -486,19 +486,19 @@ D_CHANGESTAT_FN(d_duplexdyad_receive){
 							
 							/* Define the observed structure (based on everything but t->h) */
 							/* Check if the right combination of sender and receiver are present on the dyad */
-							if(attr_receive[tail - 1] != 1 || attr_receive[t_neighbour - 1] != 1){
+							if(attr_receive[tail - 1] != 1 || attr_receive[t_neighbour - 1] != -1){
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 2; changes[1] += 2; changes[2] += 2; changes[3] += 2; changes[4] += 1;} /*I*/
 							}
 							/* Check if the correct combination of sender and receiver are present for tail -> t_neighbour */
-							if(attr_receive[tail - 1] != 1){
-								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1;} /*E*/
+							if(attr_receive[tail - 1] != -1){
+								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
 							}
 							/* Check if the correct combination of sender and receiver are present for t_neighbour -> tail */
 							if(attr_receive[t_neighbour - 1] != -1){
-								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1;} /*E*/
+								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
