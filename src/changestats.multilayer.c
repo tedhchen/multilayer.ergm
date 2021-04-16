@@ -149,54 +149,72 @@ D_CHANGESTAT_FN(d_duplexdyad_combo){
 		for(j = 0; j < 4; j++){edge_status[j] = 0;}
 		/* Check incident layers of the edge to determine edge type */
 		if(layer_mem[tail - 1] == layer_mem[head - 1]){ /* Are they intralayer or interlayer edges?*/
-			if(attr_send[tail - 1] != -1){
-				if(attr_receive[head - 1] != -1){
-					if(layer_mem[tail - 1] == la){ /* Edge on layer a */
-						/* Determine the status of the tail-head dyad */
-						edge_status[0] = IS_OUTEDGE(tail, head);
-						edge_status[1] = IS_INEDGE(tail, head);
-						
-						/* Begin looping through interlayer outedges of tail*/
-						STEP_THROUGH_OUTEDGES(tail, e1, t_neighbour){
-							if(layer_mem[t_neighbour - 1] == lb){ /* Make sure it is an interlayer edge */
-								/* Begin looping through interlayer outedge of head*/
-								STEP_THROUGH_OUTEDGES(head, e2, h_neighbour){
-									if(layer_mem[h_neighbour - 1] == lb && t_neighbour != h_neighbour){ /* Make sure it is an interlayer edge AND that is is not the same as the tail neighbour */
-										/* Determine the status of the t_neighbour-h_neighbour dyad */
-										edge_status[2] = IS_OUTEDGE(t_neighbour, h_neighbour);
-										edge_status[3] = IS_INEDGE(t_neighbour, h_neighbour);
-										/* Change statistic (turning the t-> edge from 0 to 1 */
+			if(layer_mem[tail - 1] == la){ /* Edge on layer a */
+				/* Determine the status of the tail-head dyad */
+				edge_status[0] = IS_OUTEDGE(tail, head);
+				edge_status[1] = IS_INEDGE(tail, head);
+				/* Begin looping through interlayer outedges of tail*/
+				STEP_THROUGH_OUTEDGES(tail, e1, t_neighbour){
+					if(layer_mem[t_neighbour - 1] == lb){ /* Make sure it is an interlayer edge */
+						/* Begin looping through interlayer outedge of head*/
+						STEP_THROUGH_OUTEDGES(head, e2, h_neighbour){
+							if(layer_mem[h_neighbour - 1] == lb && t_neighbour != h_neighbour){ /* Make sure it is an interlayer edge AND that is is not the same as the tail neighbour */
+								/* Determine the status of the t_neighbour-h_neighbour dyad */
+								edge_status[2] = IS_OUTEDGE(t_neighbour, h_neighbour);
+								edge_status[3] = IS_INEDGE(t_neighbour, h_neighbour);
+								/* Change statistic (turning the t-> edge from 0 to 1 */
+								/* If the observed edge is going in the right direction */
+								if(attr_send[tail - 1] != -1){
+									if(attr_receive[head - 1] != -1){
 										if(edge_status[1] == 0 && edge_status[2] == 1 && edge_status[3] == 0){changes[0] += 1;} /*_010*/
 										if(edge_status[1] == 0 && edge_status[2] == 0 && edge_status[3] == 1){changes[1] += 1;} /*_001*/
 										if(edge_status[1] == 0 && edge_status[2] == 1 && edge_status[3] == 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*_011*/
 										if(edge_status[1] == 1 && edge_status[2] == 1 && edge_status[3] == 0){changes[0] += 1; changes[2] += 1;} /*_110*/
-										if(edge_status[1] == 1 && edge_status[2] == 0 && edge_status[3] == 1){changes[1] += 1; changes[2] += 1;} /*_101*/
-										if(edge_status[1] == 1 && edge_status[2] == 1 && edge_status[3] == 1){changes[0] += 1; changes[1] += 1; changes[2] += 2; changes[3] += 1; changes[4] += 1;} /*_111*/
+										if(edge_status[1] == 1 && edge_status[2] == 0 && edge_status[3] == 1){changes[1] += 1;} /*_101*/
+										if(edge_status[1] == 1 && edge_status[2] == 1 && edge_status[3] == 1){changes[0] += 1; changes[1] += 1; changes[2] += 1; changes[3] += 1; changes[4] += 1;} /*_111*/
+									}
+								}
+								/* If the observed edge is backwards */
+								if(attr_receive[tail - 1] != -1){
+									if(attr_send[head - 1] != -1){
+										if(edge_status[1] == 1 && edge_status[2] == 0 && edge_status[3] == 1){changes[2] += 1;} /*_101*/
+										if(edge_status[1] == 1 && edge_status[2] == 1 && edge_status[3] == 1){changes[2] += 1; changes[4] += 1;} /*_111*/
 									}
 								}
 							}
 						}
-					}else{ /* Edge on layer b */
-						/* Determine status of the tail-head dyad */
-						edge_status[2] = IS_OUTEDGE(tail, head);
-						edge_status[3] = IS_INEDGE(tail, head);
-				
-						/* Begin loop based on cross layer edge from tail*/
-						STEP_THROUGH_INEDGES(tail, e1, t_neighbour){
-							if(layer_mem[t_neighbour - 1] == la){
-								/* Begin loop based on cross layer edge from head*/
-								STEP_THROUGH_INEDGES(head, e2, h_neighbour){
-									if(layer_mem[h_neighbour - 1] == la && t_neighbour != h_neighbour){
-										/* Determine the status of the dyad on layer b}}.*/
-										edge_status[0] = IS_OUTEDGE(t_neighbour, h_neighbour);
-										edge_status[1] = IS_INEDGE(t_neighbour, h_neighbour);
-										/* Define the observed structure (based on everything but t->h) */
+					}
+				}
+			}else{ /* Edge on layer b */
+				/* Determine status of the tail-head dyad */
+				edge_status[2] = IS_OUTEDGE(tail, head);
+				edge_status[3] = IS_INEDGE(tail, head);
+				/* Begin loop based on cross layer edge from tail*/
+				STEP_THROUGH_INEDGES(tail, e1, t_neighbour){
+					if(layer_mem[t_neighbour - 1] == la){
+						/* Begin loop based on cross layer edge from head*/
+						STEP_THROUGH_INEDGES(head, e2, h_neighbour){
+							if(layer_mem[h_neighbour - 1] == la && t_neighbour != h_neighbour){
+								/* Determine the status of the dyad on layer b}}.*/
+								edge_status[0] = IS_OUTEDGE(t_neighbour, h_neighbour);
+								edge_status[1] = IS_INEDGE(t_neighbour, h_neighbour);
+								/* Define the observed structure (based on everything but t->h) */
+								/* If layer_b edge is going in the same direction as the layer_a edge */
+								if(attr_send[tail - 1] != -1){
+									if(attr_receive[head - 1] != -1){
 										if(edge_status[0] == 1 && edge_status[1] == 0 && edge_status[3] == 0){changes[0] += 1;} /*10_0*/
-										if(edge_status[0] == 0 && edge_status[1] == 1 && edge_status[3] == 0){changes[1] += 1;} /*01_0*/
-										if(edge_status[0] == 1 && edge_status[1] == 1 && edge_status[3] == 0){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*11_0*/
+										if(edge_status[0] == 1 && edge_status[1] == 1 && edge_status[3] == 0){changes[0] += 1; changes[2] += 1;} /*11_0*/
 										if(edge_status[0] == 1 && edge_status[1] == 0 && edge_status[3] == 1){changes[0] += 1; changes[3] += 1;} /*10_1*/
+										if(edge_status[0] == 1 && edge_status[1] == 1 && edge_status[3] == 1){changes[0] += 1; changes[2] += 1; changes[3] += 1; changes[4] += 1;} /*11_1*/
+									}
+								}
+								/* If layer_b edge is going in the opposite direction as the layer_a edge */
+								if(attr_receive[tail - 1] != -1){
+									if(attr_send[head - 1] != -1){
+										if(edge_status[0] == 0 && edge_status[1] == 1 && edge_status[3] == 0){changes[1] += 1;} /*01_0*/
+										if(edge_status[0] == 1 && edge_status[1] == 1 && edge_status[3] == 0){changes[1] += 1;} /*11_0*/
 										if(edge_status[0] == 0 && edge_status[1] == 1 && edge_status[3] == 1){changes[1] += 1; changes[3] += 1;} /*01_1*/
-										if(edge_status[0] == 1 && edge_status[1] == 1 && edge_status[3] == 1){changes[0] += 1; changes[1] += 1; changes[2] += 1; changes[3] += 2; changes[4] += 1;} /*11_1*/
+										if(edge_status[0] == 1 && edge_status[1] == 1 && edge_status[3] == 1){changes[1] += 1; changes[3] += 1; changes[4] += 1;} /*11_1*/
 									}
 								}
 							}
@@ -223,21 +241,23 @@ D_CHANGESTAT_FN(d_duplexdyad_combo){
 							/* Define the observed structure (based on everything but t->h) */
 							/* Check if the right combination of sender and receiver are present on the dyad */
 							if((attr_send[tail - 1] != -1 && attr_receive[t_neighbour - 1] != -1) || (attr_send[t_neighbour - 1] != -1 && attr_receive[tail - 1] != -1)){
-								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 2; changes[1] += 2; changes[2] += 2; changes[3] += 2; changes[4] += 1;} /*I*/
+								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[2] += 1; changes[3] += 1; changes[4] += 1;} /*I*/
 							}
 							/* Check if the correct combination of sender and receiver are present for tail -> t_neighbour */
 							if(attr_send[tail - 1] != -1 && attr_receive[t_neighbour - 1] != -1){
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*F*/
+								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*G flipped*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
-								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
+								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1; changes[2] += 1;} /*G*/
 							}
 							/* Check if the correct combination of sender and receiver are present for t_neighbour -> tail */
 							if(attr_receive[tail - 1] != -1 && attr_send[t_neighbour - 1] != -1){
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1;} /*E*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[1] += 1;} /*F*/
+								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[1] += 1;} /*G flipped*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
-								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
+								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1; changes[2] += 1;} /*G*/
 							}
 						}
 					}
@@ -492,14 +512,14 @@ D_CHANGESTAT_FN(d_duplexdyad_receive){
 							/* Check if the correct combination of sender and receiver are present for tail -> t_neighbour */
 							if(attr_receive[tail - 1] != -1){
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1;} /*E*/
-								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*F*/
+								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
 							}
 							/* Check if the correct combination of sender and receiver are present for t_neighbour -> tail */
 							if(attr_receive[t_neighbour - 1] != -1){
 								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 1 && edge_status[3]== 0){changes[0] += 1;} /*E*/
-								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 0){changes[1] += 1;} /*F*/
+								if(edge_status[0]== 1 && edge_status[1]== 0 && edge_status[2]== 0 && edge_status[3]== 1){changes[1] += 1;} /*F*/
 								if(edge_status[0]== 0 && edge_status[1]== 1 && edge_status[2]== 1 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[3] += 1;} /*H*/
 								if(edge_status[0]== 1 && edge_status[1]== 1 && edge_status[2]== 0 && edge_status[3]== 1){changes[0] += 1; changes[1] += 1; changes[2] += 1;} /*G*/
 							}
