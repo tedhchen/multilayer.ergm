@@ -5,8 +5,8 @@
 
 ## Updates
 
-Version 0.3.0 will be updated soon. It will include new terms such as
-intra-layer `gwidegree` and intra-layer `gwodegree`.
+Version 0.2.1 has been released. This version adds the ability to
+specify `attr` for the `duplexdyad` multilayer term.
 
 Version 0.2.0 has been released. This version updates the interface with
 the `statenet` packages.
@@ -19,9 +19,9 @@ Science Research and Method*.
 
 This package extends the exponential random graph model (ERGM) to
 multilayer networks. For more information on the application of ERGMs to
-multilayer networks, see [Chen, 2019, “Statistical Inference for
-Multilayer Networks in Political
-Science”](https://doi.org/10.1017/psrm.2019.49).
+multilayer networks, see [Chen, 2021, “Statistical Inference for
+Multilayer Networks in Political Science.” *Political Science Research
+and Methods* 9(2)](https://doi.org/10.1017/psrm.2019.49).
 
 ## Installation
 
