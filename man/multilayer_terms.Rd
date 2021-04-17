@@ -84,10 +84,18 @@ This set of network terms are used to compute network statistics that include tw
     \item{\code{altkstar.fixed_crosslayer(lambda = 2, layers)} (undirected)}{\emph{Alternating k-star, cross-layer, fixed lambda:}
     This terms adds one network statistic equal to a weighted alternating sequence of \emph{k}-star statistics with weight parameter \code{lambda} on either or both network layers specified by \code{layers}. In this version of the statistic, \code{lambda}, the weight parameter, is fixed at the specified value.
     }
-    \item{\code{duplexdyad(type, layers)} (directed)}{\emph{Duplex dyad census:}
-    This term adds network statistics for one or more of the five duplex census configurations (i.e. those that cross two network layers of a multiplex network) that includes edges on both layers. The two layers \code{i} and \code{j} that comprise the duplex are specified as \code{layers = list(i, j)}. The five \code{types} are \code{e}, \code{f}, \code{g}, \code{h}, and \code{i}, to be specified as a character vector, corresponding to the same labels in Fig. 4 of Chen, 2019, ``Statistical Inference for Multilayer Networks in Political Science'' (\url{https://doi.org/10.1017/psrm.2019.49}).
+    \item{\code{duplexdyad(type, attr = NULL, levels_sender = -1, levels_receiver = -1, layers)} (directed)}{\emph{Duplex dyad census:}
+    This term adds network statistics for one or more of the five duplex census configurations (i.e. those that cross two network layers of a multiplex network) that includes edges on both layers. The two layers \code{i} and \code{j} that comprise the duplex are specified as \code{layers = list(i, j)}. The five \code{types} are \code{e}, \code{f}, \code{g}, \code{h}, and \code{i}, to be specified as a character vector, corresponding to the same labels in Fig. 5 of Chen, 2021, ``Statistical Inference for Multilayer Networks in Political Science'' (\url{https://doi.org/10.1017/psrm.2019.49}).
     
-    This term is intended to be used for multiplex networks, but can be adapted for all multilayer networks; note, however, that the interlayer edges are considered only if they are directed edges from layer \code{i} to \code{j}.
+	If \code{attr} is not \code{NULL}, the specified duplex dyad terms are only counted if the configuration contains the correct levels of the attribute specified in \code{levels_sender} and/or \code{levels_receiver}. When referring to Fig. 5 in Chen (2021), the sender is the dark gray circle and the receiver is the light gray square. Attribute levels are specified similarly to \code{nodefactor_layer()}: the numeric level refers to the location of the desired combination in the vector of all possible combinations. Specifying a negative number means removing it while keeping all others. Additionally, specifying \code{NA} is to use all levels.
+	
+	The order of all possible combinations can be seen by using \code{summary(nw~nodefactor_layer(attr, levels = TRUE, layer = 1))}. Specifying attributes can become a very complicated process. Users will benefit from testing out combinations on toy data to make sure they know what configurations they are specifying.
+	
+    This term is intended to be used for multiplex networks, but can be adapted for all multilayer networks. Note, however, that: 
+	\itemize{
+		\item interlayer edges are considered only if they are directed edges from layer \code{i} to \code{j};
+		\item the \code{attr} version currently assumes the nodal attributes are consistent across layers.
+		}
     }
     \item{\code{fourcycle_crosslayer(layers, attrname)} (undirected)}{\emph{Four cycle, cross-layer:}
     This term adds one network statistic that counts the number of four cycles that cross the two layers specified in \code{layers} if \code{attrname} is not specified with a node attribute of the specified \code{network}. If a node attribute is specified, this term is the sum of the value of the specified attribute for all four nodes in the four cycle, summed over all four cycles that cross the two specified layers (similar to how \code{nodecov} is related to \code{edges}.) 
