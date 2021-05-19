@@ -9,7 +9,7 @@ Version 0.2.1 has been released. This version adds the ability to
 specify `attr` for the `duplexdyad` multilayer term.
 
 Version 0.2.0 has been released. This version updates the interface with
-the `statenet` packages.
+the `statnet` packages.
 
 Version 0.1.6 has been released. This version ensures reproduction of
 the results in the package’s companion paper published in *Political
