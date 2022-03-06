@@ -802,45 +802,47 @@ D_CHANGESTAT_FN(d_gwtesp_layer) {
 	/* *** don't forget tail -> head */    
 	FOR_EACH_TOGGLE(i){
 		tail = TAIL(i); head = HEAD(i);
-		if(INPUT_PARAM[tail + 1] == l && INPUT_PARAM[head + 1] == l){
-			cumchange=0.0;
-			L2th=0;
-			ochange = IS_OUTEDGE(tail, head) ? -1 : 0;
-			echange = 2*ochange + 1;
-			/* step through outedges of head  */
-			STEP_THROUGH_OUTEDGES(head, e, u){
-				if (IS_OUTEDGE(tail, u) && INPUT_PARAM[u + 1] == l){
-					L2tu=ochange;
-					/* step through inedges of u */
-					STEP_THROUGH_INEDGES(u, f, v){
-						if(IS_OUTEDGE(tail, v) && INPUT_PARAM[v + 1] == l) L2tu++;
+		if(INPUT_PARAM[tail + 1] == l){
+			if(INPUT_PARAM[head + 1] == l){
+				cumchange=0.0;
+				L2th=0;
+				ochange = IS_OUTEDGE(tail, head) ? -1 : 0;
+				echange = 2*ochange + 1;
+				/* step through outedges of head  */
+				STEP_THROUGH_OUTEDGES(head, e, u){
+					if (IS_OUTEDGE(tail, u) && INPUT_PARAM[u + 1] == l){
+						L2tu=ochange;
+						/* step through inedges of u */
+						STEP_THROUGH_INEDGES(u, f, v){
+							if(IS_OUTEDGE(tail, v) && INPUT_PARAM[v + 1] == l) L2tu++;
+						}
+						cumchange += pow(oneexpa,(double)L2tu);
 					}
-					cumchange += pow(oneexpa,(double)L2tu);
 				}
-			}
-			
-			/* step through inedges of head */
-			STEP_THROUGH_INEDGES(head, e, u){
-				if (IS_OUTEDGE(tail, u)){
-					L2th++;
-				}
-				if (IS_OUTEDGE(u, tail) && INPUT_PARAM[u + 1] == l){
-					L2uh=ochange;
-					/* step through outedges of u */
-					STEP_THROUGH_OUTEDGES(u, f, v){
-						if(IS_OUTEDGE(v, head) && INPUT_PARAM[v + 1] == l) L2uh++;
+				
+				/* step through inedges of head */
+				STEP_THROUGH_INEDGES(head, e, u){
+					if (IS_OUTEDGE(tail, u)){
+						L2th++;
 					}
-					cumchange += pow(oneexpa,(double)L2uh) ;
+					if (IS_OUTEDGE(u, tail) && INPUT_PARAM[u + 1] == l){
+						L2uh=ochange;
+						/* step through outedges of u */
+						STEP_THROUGH_OUTEDGES(u, f, v){
+							if(IS_OUTEDGE(v, head) && INPUT_PARAM[v + 1] == l) L2uh++;
+						}
+						cumchange += pow(oneexpa,(double)L2uh) ;
+					}
 				}
+				
+				if(alpha < 100.0){
+					cumchange += exp(alpha)*(1.0-pow(oneexpa,(double)L2th)) ;
+				}else{
+					cumchange += (double)L2th;
+				}
+				cumchange  = echange*cumchange;
+				(CHANGE_STAT[0]) += cumchange;
 			}
-			
-			if(alpha < 100.0){
-				cumchange += exp(alpha)*(1.0-pow(oneexpa,(double)L2th)) ;
-			}else{
-				cumchange += (double)L2th;
-			}
-			cumchange  = echange*cumchange;
-			(CHANGE_STAT[0]) += cumchange;
 		}
 		TOGGLE_IF_MORE_TO_COME(i);
 	}
