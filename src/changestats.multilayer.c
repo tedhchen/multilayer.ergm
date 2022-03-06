@@ -663,7 +663,7 @@ D_CHANGESTAT_FN(d_gwdsp_layer) {
 
 D_CHANGESTAT_FN(d_gwtdsp_layer) {
 	Edge e, f;
-	int i, echange, ochange, L2tu, L2uh, l, layer_mem[N_NODES];
+	int i, echange, ochange, L2tu, L2uh, l;
 	Vertex tail, head, u, v;
 	double alpha, oneexpa, cumchange;
 
@@ -671,35 +671,32 @@ D_CHANGESTAT_FN(d_gwtdsp_layer) {
 	alpha = INPUT_PARAM[0];
 	oneexpa = 1.0-exp(-alpha);
 	l = INPUT_PARAM[1];
-	for(i = 0; i < N_NODES; i++){
-		layer_mem[i] = INPUT_PARAM[2 + i];
-	}
 
 	/* *** don't forget tail -> head */    
 	FOR_EACH_TOGGLE(i){
 		tail=TAIL(i); head=HEAD(i);
-		if(layer_mem[tail - 1] == l && layer_mem[head - 1] == l){
+		if(INPUT_PARAM[tail + 1] == l && INPUT_PARAM[head + 1] == l){
 			cumchange=0.0;
 			ochange = -IS_OUTEDGE(tail,head);
 			echange = 2*ochange + 1;
 			/* step through outedges of head */
 			for(e = MIN_OUTEDGE(head); (u=OUTVAL(e))!=0; e=NEXT_OUTEDGE(e)) {
-				if (u != tail && layer_mem[u - 1] == l){
+				if (u != tail && INPUT_PARAM[u + 1] == l){
 					L2tu=ochange; /* L2tu will be # shrd prtnrs of (tail,u) not incl. head */
 					/* step through inedges of u, incl. (head,u) itself */
 					for(f = MIN_INEDGE(u); (v=INVAL(f))!=0; f=NEXT_INEDGE(f)) {
-						if(IS_OUTEDGE(tail,v) && layer_mem[v - 1] == l) L2tu++;
+						if(IS_OUTEDGE(tail,v) && INPUT_PARAM[v + 1] == l) L2tu++;
 					}
 					cumchange += pow(oneexpa,(double)L2tu); /* sign corrected below */
 				}
 			}
 			/* step through inedges of tail */
 			for(e = MIN_INEDGE(tail); (u=INVAL(e))!=0; e=NEXT_INEDGE(e)) {
-				if (u != head && layer_mem[u - 1] == l){
+				if (u != head && INPUT_PARAM[u + 1] == l){
 					L2uh=ochange; /* L2uh will be # shrd prtnrs of (u,head) not incl. tail */
 					/* step through outedges of u , incl. (u,tail) itself */
 					for(f = MIN_OUTEDGE(u);(v=OUTVAL(f))!=0; f=NEXT_OUTEDGE(f)){
-						if(IS_OUTEDGE(v,head) && layer_mem[v - 1] == l) L2uh++;
+						if(IS_OUTEDGE(v,head) && INPUT_PARAM[v + 1] == l) L2uh++;
 					}
 					cumchange += pow(oneexpa,(double)L2uh); /* sign corrected below */
 				}
