@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This document outlines how to use the `multilayer.ergm` package to fit exponential random graph models (ERGM) in `R`. The `multilayer.ergm` package extends functionalities of the `ergm` package to multilayer network applications by providing a way to count local network configurations, or network motifs, that span more than one network layer. This document assumes you have a working knowledge of ERGMs and multilayer networks as described in [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).
+This document outlines how to use the `multilayer.ergm` package to fit exponential random graph models (ERGM) in `R`. The `multilayer.ergm` package extends functionalities of the `ergm` package to multilayer network applications by providing a way to count local network configurations, or network motifs, that span more than one network layer. This document assumes you have a working knowledge of ERGMs and multilayer networks as described in [Chen (2021)](https://doi.org/10.1017/psrm.2019.49).
 
 
 ## Installation
@@ -133,4 +133,4 @@ And the output:
 summary(mod.cross)
 ```
 
-The `duplexdyad.e` term in the output is the cross-layer reinforcement effect and the `duplexdyad.f` term is the cross-layer reciprocity effect. (For more detail on the different configurations in the duplex dyad census, see Fig. 4 of [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).) As these results show, an actor's tendency to communicate scientific information to another actor is reinforced by whether they think that other actor is influential and vice versa.
+The `duplexdyad.e` term in the output is the cross-layer reinforcement effect and the `duplexdyad.f` term is the cross-layer reciprocity effect. (For more detail on the different configurations in the duplex dyad census, see Fig. 4 of [Chen (2021)](https://doi.org/10.1017/psrm.2019.49).) As these results show, an actor's tendency to communicate scientific information to another actor is reinforced by whether they think that other actor is influential and vice versa.
