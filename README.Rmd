@@ -15,9 +15,11 @@ knitr::opts_chunk$set(
 # multilayer.ergm: Exponential Random Graph Models for Multilayer Networks
 
 ## Updates
+Version 0.2.2 has been released. This version improves performance and updates dependencies with `statnet` packages.
+
 Version 0.2.1 has been released. This version adds the ability to specify `attr` for the `duplexdyad` multilayer term.
 
-Version 0.2.0 has been released. This version updates the interface with the `statenet` packages.
+Version 0.2.0 has been released. This version updates the interface with the `statnet` packages.
 
 Version 0.1.6 has been released. This version ensures reproduction of the results in the package's companion paper published in _Political Science Research and Method_.
 

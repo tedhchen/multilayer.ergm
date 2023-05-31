@@ -5,6 +5,9 @@
 
 ## Updates
 
+Version 0.2.2 has been released. This version improves performance and
+updates dependencies with `statnet` packages.
+
 Version 0.2.1 has been released. This version adds the ability to
 specify `attr` for the `duplexdyad` multilayer term.
 
