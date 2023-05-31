@@ -133,4 +133,4 @@ And the output:
 summary(mod.cross)
 ```
 
-The `duplexdyad.e` term in the output is the cross-layer reciprocity effect and the `duplexdyad.f` term is the cross-layer reinforcement effect. (For more detail on the different configurations in the duplex dyad census, see Fig. 4 of [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).) As these results show, an actor's tendency to communicate scientific information to another actor is reinforced by whether they think that other actor is influential and vice versa.
+The `duplexdyad.e` term in the output is the cross-layer reinforcement effect and the `duplexdyad.f` term is the cross-layer reciprocity effect. (For more detail on the different configurations in the duplex dyad census, see Fig. 4 of [Chen (2019)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189835).) As these results show, an actor's tendency to communicate scientific information to another actor is reinforced by whether they think that other actor is influential and vice versa.
