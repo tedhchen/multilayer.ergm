@@ -1,6 +1,6 @@
 Package: multilayer.ergm
-Version: 0.2.1
-Date: 2021-04-17
+Version: 0.2.2
+Date: 2023-06-01
 Title: Exponential Random Graph Models for Multilayer Networks
 Authors@R: c(person("Ted Hsuan Yun", "Chen", role=c("aut", "cre"), email="ted.hsuanyun.chen@gmail.com"))
 LinkingTo: ergm
