@@ -710,6 +710,59 @@ D_CHANGESTAT_FN(d_gwtdsp_layer) {
 	UNDO_PREVIOUS_TOGGLES(i);
 }
 
+D_CHANGESTAT_FN(d_gwtdsp_attr_layer) {
+	Edge e, f;
+	int i, echange, ochange, L2tu, L2uh, l;
+	Vertex tail, head, u, v;
+	double alpha, oneexpa, cumchange;
+
+	CHANGE_STAT[0] = 0.0;
+	alpha = INPUT_PARAM[0];
+	oneexpa = 1.0-exp(-alpha);
+	l = INPUT_PARAM[1];
+
+	/* *** don't forget tail -> head */    
+	FOR_EACH_TOGGLE(i){
+		tail=TAIL(i); head=HEAD(i);
+		if(INPUT_PARAM[tail + 1] == l){
+			if(INPUT_PARAM[head + 1] == l){
+				cumchange=0.0;
+				ochange = -IS_OUTEDGE(tail,head);
+				echange = 2*ochange + 1;
+				/* step through outedges of head */
+				if(INPUT_PARAM[head + 1 + N_NODES] != -1){
+					for(e = MIN_OUTEDGE(head); (u=OUTVAL(e))!=0; e=NEXT_OUTEDGE(e)) {
+						if (u != tail && INPUT_PARAM[u + 1] == l){
+							L2tu=ochange; /* L2tu will be # shrd prtnrs of (tail,u) not incl. head */
+							/* step through inedges of u, incl. (head,u) itself */
+							for(f = MIN_INEDGE(u); (v=INVAL(f))!=0; f=NEXT_INEDGE(f)) {
+								if(IS_OUTEDGE(tail,v) && INPUT_PARAM[v + 1] == l && INPUT_PARAM[v + 1 + N_NODES] != -1) L2tu++;
+							}
+							cumchange += pow(oneexpa,(double)L2tu); /* sign corrected below */
+						}
+					}
+				}
+				/* step through inedges of tail */
+				if(INPUT_PARAM[tail + 1 + N_NODES] != -1){
+					for(e = MIN_INEDGE(tail); (u=INVAL(e))!=0; e=NEXT_INEDGE(e)) {
+						if (u != head && INPUT_PARAM[u + 1] == l){
+							L2uh=ochange; /* L2uh will be # shrd prtnrs of (u,head) not incl. tail */
+							/* step through outedges of u , incl. (u,tail) itself */
+							for(f = MIN_OUTEDGE(u);(v=OUTVAL(f))!=0; f=NEXT_OUTEDGE(f)){
+								if(IS_OUTEDGE(v,head) && INPUT_PARAM[v + 1] == l && INPUT_PARAM[v + 1 + N_NODES] != -1) L2uh++;
+							}
+							cumchange += pow(oneexpa,(double)L2uh); /* sign corrected below */
+						}
+					}
+				}
+				CHANGE_STAT[0] += echange * cumchange;
+			}
+		}
+		TOGGLE_IF_MORE_TO_COME(i);
+	}
+	UNDO_PREVIOUS_TOGGLES(i);
+}
+
 D_CHANGESTAT_FN(d_gwesp_layer) { 
 	Edge e, f;
 	int i, echange, ochange;
