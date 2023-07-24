@@ -349,19 +349,22 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   }
 
   # adding attribute specification; right now this only works for directed gwdsp
-  attrarg <- a$attr
-  levels <- a$levels
+  nodepos <- NULL
+  if(!is.null(a$attr)){
+    attrarg <- a$attr
+    levels <- a$levels
 
-  nodecov <- ergm_get_vattr(attrarg, nw)
-  attrname <- attr(nodecov, "name")
+    nodecov <- ergm_get_vattr(attrarg, nw)
+    attrname <- attr(nodecov, "name")
 
-  u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+    u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
 
-  if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
-    return()
+    if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
+      return()
+    }
+    # Recode to numeric
+    nodepos <- match(nodecov,u,nomatch=0)-1
   }
-  #   Recode to numeric
-  nodepos <- match(nodecov,u,nomatch=0)-1
   ##############
 
   decay<-a$decay
@@ -370,7 +373,7 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
 
   coef.names <- paste("gwdsp.layer.",layer,".fixed.",decay,sep="")
   if(is.directed(nw)){dname <- "gwtdsp_layer"}else{dname <- "gwdsp_layer"}
-  if(!is.null(attrarg)){dname <- "gwtdsp_attr_layer"}
+  if(!is.null(a$attr)){dname <- "gwtdsp_attr_layer"}
   list(name=dname, coef.names=coef.names, inputs=c(decay, layer, layer.mem, nodepos), pkgname = "multilayer.ergm")
 }
 
