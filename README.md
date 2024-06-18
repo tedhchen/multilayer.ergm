@@ -5,6 +5,10 @@
 
 ## Updates
 
+Version 0.2.3 has been released. This version adds the ability to
+condition shared partner counts for the GWDSP term based on specified
+node-level attributes.
+
 Version 0.2.2 has been released. This version improves performance and
 updates dependencies with `statnet` packages.
 
