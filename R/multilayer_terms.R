@@ -339,14 +339,33 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
   #   ergm.checkdirected("gwdsp", is.directed(nw), requirement=FALSE)
   # so, I've not passed 'directed=FALSE' to <check.ErgmTerm>
   a <- check.ErgmTerm(nw, arglist,
-                      varnames = c("decay","fixed","layer"),
-                      vartypes = c("numeric","logical","numeric"),
-                      defaultvalues = list(0, TRUE, NULL),
-                      required = c(FALSE, FALSE, TRUE))
+                      varnames = c("decay","fixed","attr","levels","layer"),
+                      vartypes = c("numeric","logical",ERGM_VATTR_SPEC,ERGM_LEVELS_SPEC,"numeric"),
+                      defaultvalues = list(0, TRUE, NULL, -1, NULL),
+                      required = c(FALSE, FALSE, FALSE, FALSE, TRUE))
 
   if(a$fixed != TRUE){
     stop("The current version of gwdsp_layer() only allows for fixed decay values.", call.=FALSE)
   }
+
+  # adding attribute specification; right now this only works for directed gwdsp
+  nodepos <- NULL
+  if(!is.null(a$attr)){
+    attrarg <- a$attr
+    levels <- a$levels
+
+    nodecov <- ergm_get_vattr(attrarg, nw)
+    attrname <- attr(nodecov, "name")
+
+    u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+
+    if (length(u)==0) { # Get outta here!  (can happen if user passes attribute with one value)
+      return()
+    }
+    # Recode to numeric
+    nodepos <- match(nodecov,u,nomatch=0)-1
+  }
+  ##############
 
   decay<-a$decay
   layer<-a$layer
@@ -354,7 +373,8 @@ InitErgmTerm.gwdsp_layer<-function(nw, arglist, initialfit=FALSE, ...) {
 
   coef.names <- paste("gwdsp.layer.",layer,".fixed.",decay,sep="")
   if(is.directed(nw)){dname <- "gwtdsp_layer"}else{dname <- "gwdsp_layer"}
-  list(name=dname, coef.names=coef.names, inputs=c(decay, layer, layer.mem), pkgname = "multilayer.ergm")
+  if(!is.null(a$attr)){dname <- "gwtdsp_attr_layer"}
+  list(name=dname, coef.names=coef.names, inputs=c(decay, layer, layer.mem, nodepos), pkgname = "multilayer.ergm")
 }
 
 # 1.2) GWESP within layer.
