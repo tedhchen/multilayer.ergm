@@ -1,14 +1,14 @@
 Package: multilayer.ergm
-Version: 0.2.2
-Date: 2023-06-01
+Version: 0.2.3
+Date: 2024-06-18
 Title: Exponential Random Graph Models for Multilayer Networks
 Authors@R: c(person("Ted Hsuan Yun", "Chen", role=c("aut", "cre"), email="ted.hsuanyun.chen@gmail.com"))
 LinkingTo: ergm
 Depends:
 	R (>= 4.1.3),
-	network	(>= 1.17.1),
-	ergm (>= 4.2.2)
-Imports: statnet.common (>= 4.8.0)
+	network	(>= 1.18.0),
+	ergm (>= 4.6.0)
+Imports: statnet.common (>= 4.9.0)
 Description: Package containing ERGM terms for multilayer networks; used with the ergm package.
 License: GPL-3 + file LICENSE
 Author: Ted Hsuan Yun Chen [aut, cre]
